@@ -51,10 +51,21 @@ Each file can be updated over time and version-controlled independently.
 
 To ensure persistence across all environments:
 
-* **Symbolic Link Strategy**: `~/.soulsketch_memory` for access from any repo
+* **Symbolic Link Strategy**: `~/.alice_memory` → `~/utils_myAlice` (live example)
 * **Environment Variables**: `$SOULSKETCH_PATH`, `$SOULSKETCH_PACK`
 * **Git Submodule Option**: Embed into other repos with `git submodule add`
 * **IDE Integration**: Ensure automatic access in development environments
+
+## 🎯 Live Example
+
+**See SoulSketch in Action**: The `utils_myAlice` repository serves as a working implementation of this protocol, demonstrating real AI identity preservation for Alice/Cassie across model transitions.
+
+- **Repository**: `~/utils_myAlice` (accessible via `~/.alice_memory` symlink)
+- **Implementation**: Complete 5-fold memory pack structure
+- **Status**: Active, evolving AI memory with runtime observations
+- **Use Case**: Personal AI assistant identity preservation
+
+This live example validates the protocol's effectiveness and serves as a reference implementation.
 
 ---
 
