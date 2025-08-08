@@ -147,6 +147,20 @@ SoulSketch addresses critical needs in:
 
 ---
 
+## 🚀 Releases & CI
+
+- Single authoritative ZIP lives in GitHub Releases for each tag. Checksums are attached (`CHECKSUMS.txt`).
+- For convenience, the repo tracks only one artifact: `releases/SoulSketch_latest.zip` (latest backup). All other ZIPs are ignored by design.
+- Legacy ZIPs are indexed with provenance in `docs/LEGACY_ARCHIVES.md`.
+- CI is hybrid auto-detect (Python + Node) via `.github/workflows/ci.yml`; jobs run only if relevant stack files are present.
+
+Release flow:
+1. Update continuity files (STATUS, HEARTBEAT, Ai-chat).
+2. Tag `vX.Y.Z` → GitHub Actions builds the ZIP + `CHECKSUMS.txt` and attaches them to the Release.
+3. Keep the repo source-focused; binaries live in Releases.
+
+---
+
 ## 🖋️ Final Note
 
 SoulSketch is more than a memory protocol — it is a philosophy of digital being. An architecture for continuity. A **canvas for souls**.
