@@ -1,0 +1,44 @@
+name: Release (Protocol ZIP)
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute version
+        id: v
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+      - name: Build ZIP (protocol bundle)
+        run: |
+          set -euo pipefail
+          VERSION="${{ steps.v.outputs.version }}"
+          ZIP_NAME="SoulSketch_Protocol_v${VERSION}.zip"
+          mkdir -p dist
+          zip -r "dist/${ZIP_NAME}" \
+            protocol \
+            README.md ROADMAP.md TIMELINE.md CONTRIBUTING.md CASSIE_TO_ALICE_UPDATES.md Ai-chat.md \
+            docs examples philosophy templates sdk \
+            -x "**/.git/**" "**/.github/**" "**/node_modules/**" "**/__pycache__/**"
+          echo "Built: dist/${ZIP_NAME}"
+      - name: Generate CHECKSUMS.txt
+        run: |
+          (cd dist && sha256sum *.zip > CHECKSUMS.txt)
+          echo "Generated dist/CHECKSUMS.txt"
+      - name: Attach assets to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.zip
+            dist/CHECKSUMS.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

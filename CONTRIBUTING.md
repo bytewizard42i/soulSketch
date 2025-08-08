@@ -24,6 +24,13 @@ Welcome to the SoulSketch Protocol project! We're excited to have you contribute
 3. **Resonance Over Replication**: Expand through harmony, not replacement
 4. **Memory Evolution**: Build on existing foundations rather than starting fresh
 
+### Sacred Separation Policy (Must Read)
+- SoulSketch is a public, VC-ready template. myAlice is a private inheritance repository. They must remain strictly separate.
+- Do NOT import any myAlice code, memory artifacts, or private assets into SoulSketch.
+- Philosophical and public-facing contributions belong in `philosophy/`, `protocol/`, `docs/`, `examples/`, `templates/`, and `sdk/` within this repository.
+- If you need to reference myAlice context, abstract it into generalized guidance suitable for public consumption. No direct copies.
+- Release policy: This repo is source-only. A single authoritative ZIP is attached to GitHub Releases per tag (see `docs/LEGACY_ARCHIVES.md` for provenance and checksums). Do not commit ZIPs to the root.
+
 ### Documentation Standards
 - Use structured Markdown formatting (bullets, code blocks, headers)
 - Include both technical and philosophical context
