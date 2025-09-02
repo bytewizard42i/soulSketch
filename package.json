@@ -1,0 +1,57 @@
+{
+  "name": "soulsketch-protocol",
+  "version": "1.0.0",
+  "description": "AI Identity Preservation Protocol with Advanced Memory Management",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "cli": "tsx cli/soulsketch-cli.ts",
+    "test": "vitest",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write \"**/*.{ts,json,md}\""
+  },
+  "bin": {
+    "soulsketch": "./dist/cli/soulsketch-cli.js"
+  },
+  "keywords": [
+    "ai",
+    "memory",
+    "identity",
+    "preservation",
+    "llm",
+    "agent"
+  ],
+  "author": "SoulSketch Protocol",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "csv-stringify": "^6.4.5",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
+    "ora": "^8.0.1",
+    "table": "^6.8.1",
+    "tar": "^6.2.0",
+    "uuid": "^9.0.1",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.10.5",
+    "@types/tar": "^6.1.10",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
