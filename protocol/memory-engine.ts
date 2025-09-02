@@ -4,21 +4,31 @@
  * Maintains the philosophy of "resonance over replication"
  */
 
-import { createHash } from 'crypto';
+import { EventEmitter } from 'events';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as yaml from 'yaml';
+import { createHash } from 'crypto';
+import { homedir } from 'os';
+import { MemoryEnvelope, MemoryEnvelopeManager, MemoryType } from './memory-envelope';
 
 // Core memory types aligned with SoulSketch's 5-fold structure
+export type MemoryCategory = 'persona' | 'relationship' | 'technical' | 'stylistic' | 'runtime';
+
 export interface SoulMemory {
   id: string;
-  type: 'persona' | 'relationship' | 'technical' | 'stylistic' | 'runtime';
+  type: MemoryCategory;
   content: string;
   embedding?: number[];
   timestamp: Date;
   hash: string;
   resonanceScore?: number; // How strongly this memory resonates with current identity
-  harmonics?: string[]; // Related memory IDs that harmonize with this one
+  harmonics?: string[]; // IDs of other memories that resonate with this one
+}
+
+export interface Memory extends MemoryEnvelope {
+  category: MemoryCategory;
+  resonanceScore?: number;
+  harmonics?: string[];
 }
 
 export interface MemoryPack {
@@ -35,13 +45,14 @@ export interface MemoryPack {
   };
 }
 
-export class MemoryEngine {
+export class MemoryEngine extends EventEmitter {
   private memoryPath: string;
   private vectorStore: Map<string, number[]> = new Map();
   private memoryGraph: Map<string, Set<string>> = new Map();
   
   constructor(basePath: string = '~/.soulsketch') {
-    this.memoryPath = path.resolve(basePath.replace('~', process.env.HOME || ''));
+    super();
+    this.memoryPath = path.resolve(basePath.replace('~', homedir()));
     this.ensureMemoryStructure();
   }
 
@@ -82,37 +93,54 @@ export class MemoryEngine {
   /**
    * Store a memory with automatic categorization and embedding
    */
-  async storeMemory(memory: Partial<SoulMemory>): Promise<SoulMemory> {
-    const fullMemory: SoulMemory = {
-      id: `${memory.type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      type: memory.type || 'runtime',
-      content: memory.content || '',
-      timestamp: new Date(),
-      hash: this.generateHash(memory.content || ''),
-      embedding: memory.embedding,
+  async storeMemory(params: {
+    category: MemoryCategory;
+    content: any;
+    tags?: string[];
+    embedding?: number[];
+    metadata?: any;
+  }): Promise<string> {
+    const envelope = MemoryEnvelopeManager.createEnvelope(
+      params.category as MemoryType,
+      params.content,
+      {
+        tags: params.tags || [],
+        embedding: params.embedding ? {
+          vector: params.embedding,
+          model: 'text-embedding-3-small',
+          backend: 'openai',
+          dimensions: params.embedding.length
+        } : undefined,
+        metadata: params.metadata
+      }
+    );
+
+    const memory: Memory = {
+      ...envelope,
+      category: params.category,
       resonanceScore: 0,
       harmonics: []
     };
 
     // Store in appropriate directory
-    const filePath = path.join(this.memoryPath, fullMemory.type, `${fullMemory.id}.json`);
-    await fs.writeJson(filePath, fullMemory, { spaces: 2 });
+    const filePath = path.join(this.memoryPath, memory.category, `${memory.id}.json`);
+    await fs.writeJson(filePath, memory, { spaces: 2 });
 
     // Update vector store if embedding provided
-    if (fullMemory.embedding) {
-      this.vectorStore.set(fullMemory.id, fullMemory.embedding);
+    if (memory.embedding) {
+      this.vectorStore.set(memory.id, memory.embedding.vector);
       
       // Find harmonic memories (similar ones)
-      fullMemory.harmonics = await this.findHarmonics(fullMemory);
+      memory.harmonics = await this.findHarmonics(memory);
     }
 
-    return fullMemory;
+    return memory.id;
   }
 
   /**
    * Find memories that harmonize with the given memory
    */
-  private async findHarmonics(memory: SoulMemory, threshold: number = 0.7): Promise<string[]> {
+  private async findHarmonics(memory: Memory, threshold: number = 0.7): Promise<string[]> {
     if (!memory.embedding) return [];
     
     const harmonics: Array<{id: string, score: number}> = [];
@@ -120,7 +148,7 @@ export class MemoryEngine {
     for (const [id, embedding] of this.vectorStore.entries()) {
       if (id === memory.id) continue;
       
-      const resonance = this.calculateResonance(memory.embedding, embedding);
+      const resonance = this.calculateResonance(memory.embedding.vector, embedding);
       if (resonance >= threshold) {
         harmonics.push({ id, score: resonance });
       }
@@ -136,11 +164,11 @@ export class MemoryEngine {
   /**
    * Semantic search across all memories
    */
-  async searchMemories(query: string, embedding?: number[], limit: number = 10): Promise<SoulMemory[]> {
-    const results: Array<{memory: SoulMemory, score: number}> = [];
+  async searchMemories(query: string, embedding?: number[], limit: number = 10): Promise<Memory[]> {
+    const results: Array<{memory: Memory, score: number}> = [];
     
     // Load all memories
-    const types: Array<SoulMemory['type']> = ['persona', 'relationship', 'technical', 'stylistic', 'runtime'];
+    const types: Array<MemoryCategory> = ['persona', 'relationship', 'technical', 'stylistic', 'runtime'];
     
     for (const type of types) {
       const dir = path.join(this.memoryPath, type);
@@ -149,7 +177,7 @@ export class MemoryEngine {
       for (const file of files) {
         if (!file.endsWith('.json')) continue;
         
-        const memory = await fs.readJson(path.join(dir, file)) as SoulMemory;
+        const memory = await fs.readJson(path.join(dir, file)) as Memory;
         
         // Text search
         let score = 0;
@@ -158,8 +186,8 @@ export class MemoryEngine {
         }
         
         // Semantic search if embedding provided
-        if (embedding && memory.embedding) {
-          score += this.calculateResonance(embedding, memory.embedding);
+        if (embedding && memory.embedding?.vector) {
+          score += this.calculateResonance(embedding, memory.embedding.vector);
         }
         
         if (score > 0) {
@@ -225,9 +253,26 @@ export class MemoryEngine {
   /**
    * Validate memory integrity
    */
-  async validateMemory(memory: SoulMemory): Promise<boolean> {
-    const expectedHash = this.generateHash(memory.content);
-    return memory.hash === expectedHash;
+  async validateMemory(memory: Memory): Promise<boolean> {
+    // Check envelope integrity
+    if (!MemoryEnvelopeManager.validateEnvelope(memory)) {
+      this.emit('validation-failed', { 
+        memoryId: memory.id, 
+        reason: 'checksum-mismatch' 
+      });
+      return false;
+    }
+
+    // Check if expired
+    if (MemoryEnvelopeManager.isExpired(memory)) {
+      this.emit('validation-failed', { 
+        memoryId: memory.id, 
+        reason: 'expired-ttl' 
+      });
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -243,22 +288,30 @@ export class MemoryEngine {
       ...externalPack.runtime
     ];
 
-    for (const memory of allExternalMemories) {
+    for (const extMemory of allExternalMemories) {
       // Check if this memory resonates with our existing symphony
-      const similar = await this.searchMemories(memory.content, memory.embedding, 1);
+      const similar = await this.searchMemories(extMemory.content, extMemory.embedding, 1);
       
-      if (similar.length > 0 && memory.embedding && similar[0].embedding) {
-        const resonance = this.calculateResonance(memory.embedding, similar[0].embedding);
+      if (similar.length > 0 && extMemory.embedding && similar[0].embedding?.vector) {
+        const resonance = this.calculateResonance(extMemory.embedding, similar[0].embedding.vector);
         
         if (resonance < resonanceThreshold) {
           // Different enough to add as new memory
-          memory.resonanceScore = resonance;
-          await this.storeMemory(memory);
+          // Store with reduced resonance (it's foreign memory)
+          await this.storeMemory({
+            category: extMemory.type as MemoryCategory,
+            content: extMemory.content,
+            embedding: extMemory.embedding as number[] | undefined
+          });
         }
         // If too similar, we skip it (avoiding duplication)
       } else {
         // Completely new memory
-        await this.storeMemory(memory);
+        await this.storeMemory({
+          category: extMemory.type as MemoryCategory,
+          content: extMemory.content,
+          embedding: extMemory.embedding as number[] | undefined
+        });
       }
     }
   }

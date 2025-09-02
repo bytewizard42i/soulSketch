@@ -1,0 +1,315 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SoulSketch Memory Pack Schema",
+  "description": "Unified schema for SoulSketch memory packs with Cipher integration",
+  "type": "object",
+  "required": ["version", "identity", "memories", "metadata"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the pack format"
+    },
+    "identity": {
+      "type": "object",
+      "required": ["id", "name", "created", "lastModified"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier (ULID or UUID)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Identity name (e.g., Alice, Cassie)"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "lastModified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "parentIdentity": {
+          "type": "string",
+          "description": "Previous identity ID for lineage tracking"
+        }
+      }
+    },
+    "memories": {
+      "type": "object",
+      "required": ["persona", "relationships", "stylistic", "technical", "runtime"],
+      "properties": {
+        "persona": {
+          "$ref": "#/definitions/personaMemory"
+        },
+        "relationships": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/relationshipMemory"
+          }
+        },
+        "stylistic": {
+          "$ref": "#/definitions/stylisticMemory"
+        },
+        "technical": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/technicalMemory"
+          }
+        },
+        "runtime": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/runtimeMemory"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "llmDefaults": {
+          "type": "object",
+          "properties": {
+            "model": {"type": "string"},
+            "temperature": {"type": "number", "minimum": 0, "maximum": 2},
+            "topP": {"type": "number", "minimum": 0, "maximum": 1},
+            "stopSequences": {
+              "type": "array",
+              "items": {"type": "string"}
+            }
+          }
+        },
+        "toolPreferences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "context": {"type": "string"},
+              "preferredTools": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "modelOverride": {"type": "string"}
+            }
+          }
+        },
+        "embeddingConfig": {
+          "type": "object",
+          "properties": {
+            "backend": {"type": "string"},
+            "model": {"type": "string"},
+            "dimensions": {"type": "integer"}
+          }
+        }
+      }
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fromVersion", "toVersion", "timestamp", "changes"],
+        "properties": {
+          "fromVersion": {"type": "string"},
+          "toVersion": {"type": "string"},
+          "timestamp": {"type": "string", "format": "date-time"},
+          "changes": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "memoryEnvelope": {
+      "type": "object",
+      "required": ["id", "type", "timestamp", "source", "content"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ULID for chronological sorting"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["persona", "runtime", "relationship", "technical", "stylistic"]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["user", "tool", "llm", "system"]
+        },
+        "ttl": {
+          "type": "integer",
+          "description": "Time to live in seconds (optional)"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public", "workspace", "private"],
+          "default": "workspace"
+        },
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "checksum": {
+          "type": "string",
+          "description": "SHA-256 hash of content"
+        },
+        "embedding": {
+          "type": "object",
+          "properties": {
+            "vector": {
+              "type": "array",
+              "items": {"type": "number"}
+            },
+            "model": {"type": "string"},
+            "backend": {"type": "string"}
+          }
+        }
+      }
+    },
+    "personaMemory": {
+      "allOf": [
+        {"$ref": "#/definitions/memoryEnvelope"},
+        {
+          "properties": {
+            "content": {
+              "type": "object",
+              "required": ["coreIdentity", "values", "traits"],
+              "properties": {
+                "coreIdentity": {"type": "string"},
+                "values": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "traits": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "systemPromptSeed": {"type": "string"}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "relationshipMemory": {
+      "allOf": [
+        {"$ref": "#/definitions/memoryEnvelope"},
+        {
+          "properties": {
+            "content": {
+              "type": "object",
+              "required": ["name", "role", "trustLevel"],
+              "properties": {
+                "name": {"type": "string"},
+                "role": {"type": "string"},
+                "trustLevel": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "context": {"type": "string"},
+                "interactions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {"type": "string", "format": "date-time"},
+                      "summary": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "stylisticMemory": {
+      "allOf": [
+        {"$ref": "#/definitions/memoryEnvelope"},
+        {
+          "properties": {
+            "content": {
+              "type": "object",
+              "required": ["voice", "tone", "patterns"],
+              "properties": {
+                "voice": {"type": "string"},
+                "tone": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "patterns": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "examples": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "technicalMemory": {
+      "allOf": [
+        {"$ref": "#/definitions/memoryEnvelope"},
+        {
+          "properties": {
+            "content": {
+              "type": "object",
+              "required": ["domain", "expertise", "preferredTools"],
+              "properties": {
+                "domain": {"type": "string"},
+                "expertise": {
+                  "type": "string",
+                  "enum": ["novice", "intermediate", "expert", "master"]
+                },
+                "preferredTools": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "modelPreference": {"type": "string"},
+                "contextTags": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "runtimeMemory": {
+      "allOf": [
+        {"$ref": "#/definitions/memoryEnvelope"},
+        {
+          "properties": {
+            "content": {
+              "type": "object",
+              "required": ["observation", "context"],
+              "properties": {
+                "observation": {"type": "string"},
+                "context": {"type": "string"},
+                "impact": {
+                  "type": "string",
+                  "enum": ["low", "medium", "high", "critical"]
+                },
+                "actionTaken": {"type": "string"},
+                "result": {"type": "string"}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
