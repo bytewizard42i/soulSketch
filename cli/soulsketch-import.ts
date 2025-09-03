@@ -5,7 +5,7 @@
  */
 
 import { Command } from 'commander';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
