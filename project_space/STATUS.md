@@ -31,8 +31,10 @@
 - Templates: established
 
 ## Next Milestones
+- ✅ Commit and push v1.1.0 complete (36225b8)
+- ✅ Update package created (SoulSketch_2025-09-24_08-45-46.zip)
+- ✅ ForAlice file updated with commit/package info
 - [ ] Share update package with Alice via ChatGPT
-- [ ] Create CHANGELOG for v1.1.0
-- [ ] Tag and release v1.1.0
+- [ ] Tag and release v1.1.0 on GitHub
 - [ ] Announce public availability
 - [ ] Monitor community response

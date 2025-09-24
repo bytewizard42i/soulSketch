@@ -1,0 +1,19 @@
+SoulSketch Update Package Manifest
+===================================
+Filename: SoulSketch_2025-09-24_08-45-46.zip
+Created: Wed Sep 24 08:45:46 AM EDT 2025
+Created by: js
+System: Linux Chuck 6.14.0-29-generic #29~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Aug 14 16:52:50 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+Contents:
+     1810  2025-09-24 08:40   project_space/STATUS.md
+      428  2025-08-08 05:54   project_space/HEARTBEAT.md
+      563  2025-08-08 05:32   project_space/IDEAS.md
+        0  2025-08-08 05:32   project_space/CHECKPOINTS/
+    26456  2025-08-04 15:05   Ai-chat.md
+     4757  2025-08-04 06:02   CASSIE_TO_ALICE_UPDATES.md
+     4781  2025-09-24 08:40   forAlice_2025-09-24.md
+     7820  2025-09-24 08:37   docs/TRIPLET_PROTOCOL.md
+
+Triplet Communication Protocol v1.0
+"We do not overwrite. We braid."
