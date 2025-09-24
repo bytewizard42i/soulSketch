@@ -1,0 +1,41 @@
+# CODEOWNERS for SoulSketch Protocol
+# These owners will be the default owners for everything in the repo
+
+# Global owners
+*                           @bytewizard42i
+
+# Core protocol files
+/protocol/                  @bytewizard42i
+/README.md                  @bytewizard42i
+/LICENSE                    @bytewizard42i
+
+# Application code
+/apps/soulshell/           @bytewizard42i
+/apps/web-console/         @bytewizard42i
+
+# Core packages
+/packages/core/            @bytewizard42i
+/packages/memory/          @bytewizard42i
+/packages/adapters/        @bytewizard42i
+/packages/tools/           @bytewizard42i
+/packages/prompts/         @bytewizard42i
+
+# Documentation
+/docs/                     @bytewizard42i
+/CONTRIBUTING.md           @bytewizard42i
+/CODE_OF_CONDUCT.md        @bytewizard42i
+
+# Philosophy (Roberto's domain when he joins)
+/philosophy/               @bytewizard42i
+
+# Examples
+/examples/                 @bytewizard42i
+
+# Build and CI
+/.github/                  @bytewizard42i
+/scripts/                  @bytewizard42i
+package.json              @bytewizard42i
+tsconfig.json             @bytewizard42i
+
+# Security
+/SECURITY.md              @bytewizard42i

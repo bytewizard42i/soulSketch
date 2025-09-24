@@ -1,0 +1,100 @@
+name: ✨ Feature Request
+description: Suggest an idea for SoulSketch
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! 
+        
+        Remember: "We do not overwrite. We braid."
+  
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Description
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: A clear and concise description of what the problem is. Ex. I'm always frustrated when...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like
+      placeholder: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+  
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe alternatives you've considered
+      placeholder: Any alternative solutions or features you've considered.
+  
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature Area
+      description: Which area does this feature belong to?
+      multiple: true
+      options:
+        - Core Protocol
+        - Memory System
+        - Model Adapters
+        - CLI Tools
+        - Web Console
+        - Documentation
+        - Examples
+        - Testing
+        - Security
+        - Philosophy
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Critical (blocking work)
+        - High (significantly improves workflow)
+        - Medium (nice to have)
+        - Low (minor improvement)
+    validations:
+      required: true
+  
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Ideas
+      description: If you have ideas on how to implement this feature, please share them
+      placeholder: Technical details, API design, etc.
+  
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you willing to contribute?
+      options:
+        - Yes, I can implement this feature
+        - Yes, I can help with testing
+        - Yes, I can help with documentation
+        - No, but I'm available for discussion
+        - No
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/bytewizard42i/soulSketch/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

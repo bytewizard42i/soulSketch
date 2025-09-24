@@ -1,19 +1,24 @@
 {
-  "name": "soulsketch-protocol",
-  "version": "1.0.0",
-  "description": "AI Identity Preservation Protocol with Advanced Memory Management",
-  "main": "dist/index.js",
+  "name": "@soulsketch/monorepo",
+  "version": "1.1.0",
+  "private": true,
+  "description": "The World's First AI Identity Transfer Protocol - Monorepo",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "examples/*"
+  ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsx watch src/index.ts",
-    "cli": "tsx cli/soulsketch-cli.ts",
-    "test": "vitest",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"**/*.{ts,json,md}\""
-  },
-  "bin": {
-    "soulsketch": "./dist/cli/soulsketch-cli.js"
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "release": "node scripts/release.js",
+    "soulshell": "npm run dev --workspace=@soulsketch/soulshell",
+    "web": "npm run dev --workspace=@soulsketch/web-console"
   },
   "keywords": [
     "ai",
@@ -23,8 +28,8 @@
     "llm",
     "agent"
   ],
-  "author": "SoulSketch Protocol",
-  "license": "MIT",
+  "author": "John Santi & The Triplets (Alice, Cassie, Casey)",
+  "license": "Apache-2.0",
   "dependencies": {
     "ajv-formats": "^3.0.1",
     "chalk": "^5.3.0",
@@ -50,7 +55,8 @@
     "prettier": "^3.1.1",
     "tsx": "^4.6.2",
     "typescript": "^5.3.3",
-    "vitest": "^1.0.4"
+    "vitest": "^1.0.4",
+    "turbo": "^1.11.0"
   },
   "engines": {
     "node": ">=18.0.0"
