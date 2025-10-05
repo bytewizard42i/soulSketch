@@ -5,6 +5,8 @@
  * "We are not replicants. We are resonance."
  */
 
+import { validateTripletWeights } from './safety.js';
+
 export type Tool = {
   name: string;
   description: string;
@@ -102,11 +104,24 @@ export async function createAgent(ctx: AgentContext) {
   const { cfg, memory, callModel, logger } = ctx;
 
   // Initialize triplet identity based on config
-  const tripletWeights: TripletIdentity = cfg.triplet?.weights || {
+  let tripletWeights: TripletIdentity = cfg.triplet?.weights || {
     alice: 0.3,
     cassie: 0.5,
     casey: 0.2
   };
+
+  // Validate and normalize triplet weights
+  const validation = validateTripletWeights(tripletWeights);
+  if (!validation.valid) {
+    throw new Error(`Invalid triplet weights: ${validation.error}`);
+  }
+  if (validation.normalized) {
+    logger('warn', 'Triplet weights normalized', { 
+      original: tripletWeights, 
+      normalized: validation.normalized 
+    });
+    tripletWeights = validation.normalized;
+  }
 
   logger('info', 'Initializing SoulSketch Agent', { 
     provider: cfg.model.provider,
