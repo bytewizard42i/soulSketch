@@ -1,0 +1,112 @@
+name: SoulSketch Memory Sync
+
+on:
+  push:
+    paths:
+      - "memory_packs/**.md"
+      - "config/.soulmeta.json"
+  workflow_dispatch:
+    inputs:
+      sync_all:
+        description: "Sync all memory packets to Notion"
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  validate-memory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate memory packets
+        run: |
+          echo "🔍 Validating memory packet structure..."
+          # TODO: Add validation script
+          # node scripts/validate_packets.ts
+
+      - name: Check for duplicates
+        run: |
+          echo "🔍 Checking for duplicate memory packets..."
+          # TODO: Add duplicate detection
+          # node scripts/check_duplicates.ts
+
+  sync-to-notion:
+    runs-on: ubuntu-latest
+    needs: validate-memory
+    if: ${{ vars.NOTION_ENABLED == 'true' || github.event.inputs.sync_all == 'true' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Backfill to Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DB_MEMORY_ID: ${{ secrets.NOTION_DB_MEMORY_ID }}
+          NOTION_DB_PROJECTS_ID: ${{ secrets.NOTION_DB_PROJECTS_ID }}
+          NOTION_DB_ENTITIES_ID: ${{ secrets.NOTION_DB_ENTITIES_ID }}
+        run: |
+          if [ "${{ github.event.inputs.sync_all }}" = "true" ]; then
+            echo "🔄 Syncing all memory packets to Notion..."
+            node --loader ts-node/esm scripts/backfill_to_notion.ts
+          else
+            echo "🔄 Syncing recent memory packets to Notion..."
+            node --loader ts-node/esm scripts/backfill_to_notion.ts --since $(date -d '7 days ago' +%Y-%m-%d)
+          fi
+
+      - name: Report sync status
+        if: always()
+        run: |
+          echo "📊 Sync completed"
+          # TODO: Post to Slack/Discord if configured
+
+  auto-commit-sanitized:
+    runs-on: ubuntu-latest
+    needs: validate-memory
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate sanitized exports
+        run: |
+          echo "📝 Generating public-facing exports..."
+          mkdir -p exports/public
+          node --loader ts-node/esm scripts/export_md.ts --visibility public --out exports/public
+
+      - name: Commit sanitized exports
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update sanitized public exports"
+          file_pattern: "exports/public/*.md"
+          commit_user_name: "SoulSketch Bot"
+          commit_user_email: "bot@soulsketch.me"
+          skip_dirty_check: true

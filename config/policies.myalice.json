@@ -1,0 +1,84 @@
+{
+  "$schema": "./policies.schema.json",
+  "version": "1.0.0",
+  "roles": {
+    "owner": {
+      "description": "Full access to all memory packets including secrets",
+      "fields": ["*"],
+      "redactions": [],
+      "permissions": {
+        "read": true,
+        "write": true,
+        "delete": true,
+        "share": true
+      }
+    },
+    "collaborator": {
+      "description": "Access to sanitized content for team collaboration",
+      "fields": [
+        "id",
+        "title",
+        "summary",
+        "project",
+        "tags",
+        "created_at",
+        "updated_at",
+        "authors",
+        "visibility",
+        "links",
+        "sanitized_content"
+      ],
+      "redactions": ["secrets", "private_keys", "api_keys"],
+      "permissions": {
+        "read": true,
+        "write": true,
+        "delete": false,
+        "share": false
+      }
+    },
+    "public": {
+      "description": "Public-facing information only",
+      "fields": [
+        "id",
+        "title",
+        "summary",
+        "project",
+        "tags",
+        "created_at",
+        "authors"
+      ],
+      "redactions": ["secrets", "private_keys", "pii", "api_keys", "internal_notes"],
+      "permissions": {
+        "read": true,
+        "write": false,
+        "delete": false,
+        "share": false
+      }
+    }
+  },
+  "redaction_patterns": {
+    "secrets": [
+      "# Secrets",
+      "# Internal",
+      "<!-- secret -->",
+      "<!-- private -->"
+    ],
+    "api_keys": [
+      "API_KEY",
+      "SECRET_KEY",
+      "TOKEN",
+      "PASSWORD"
+    ],
+    "pii": [
+      "email",
+      "phone",
+      "address",
+      "ssn"
+    ]
+  },
+  "visibility_rules": {
+    "default": "owner",
+    "auto_downgrade_after_days": 90,
+    "public_projects": []
+  }
+}
