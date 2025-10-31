@@ -50,10 +50,18 @@ export class InMemoryDriver implements MemoryDriver {
  * SQLite driver (stub - requires implementation)
  */
 export class SQLiteDriver implements MemoryDriver {
-  constructor(private _dbPath: string) {}
+  private _dbPath: string;
+  constructor(dbPath: string) {
+    this._dbPath = dbPath;
+    // TODO: Initialize SQLite connection when implemented
+  }
+
+  get dbPath(): string {
+    return this._dbPath;
+  }
 
   async write(_entry: MemoryEntry): Promise<void> {
-    throw new Error('SQLite driver not yet implemented');
+    throw new Error(`SQLite driver not yet implemented for ${this._dbPath}`);
   }
 
   async search(_query: string, _limit?: number): Promise<MemoryEntry[]> {
