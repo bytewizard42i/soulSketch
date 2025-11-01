@@ -86,7 +86,5 @@ business_plans/
 partnerships/
 contracts/
 financial/
-
-# Artifacts: keep repo source-only by default
 *.zip
 !releases/SoulSketch_latest.zip
