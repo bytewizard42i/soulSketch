@@ -53,31 +53,88 @@ Traditional MCP servers require runtime dependencies (npx, uvx, Python) and run 
 - **Ephemeral execution** - Containers spin up per-request, then exit
 - **Trusted sources** - Vetted catalog with container signatures
 
-## 🚀 Quick Start
+## 🚀 Quick Start with Claude Code
 
 ### Prerequisites
-- Docker Desktop (latest version)
-- An MCP-compatible client (Claude Code, Gemini CLI, VS Code Copilot, etc.)
+- Docker Desktop 4.40+ (4.48+ recommended for auto-launch)
+- MCP Toolkit enabled in Docker Desktop
+- Claude Code installed
 
-### Enable MCP Servers via Docker Desktop
-
-1. Open **Docker Desktop** → **MCP Toolkit**
-2. Browse the **Catalog** (260+ servers)
-3. Click **+** to add a server (e.g., GitHub)
-4. Configure credentials (OAuth or token)
-5. Go to **Clients** → Connect your AI tool
-
-### Enable via CLI
+### Step 1: Install Claude Code
 
 ```bash
-# List available MCP servers
+# Install Claude Code
+curl -fsSL https://claude.ai/install.sh | sh
+
+# Verify installation
+claude --version  # Should show 2.0.5+
+```
+
+### Step 2: Connect Claude Code to Docker MCP
+
+**Option A: One-Click (Recommended)**
+1. Open **Docker Desktop** → **MCP Toolkit**
+2. Click **Clients** tab
+3. Find "Claude Code" → Click **Connect**
+
+**Option B: Command Line**
+```bash
+# Navigate to your project
+cd /path/to/your/project
+
+# Connect Claude Code
+docker mcp client connect claude-code
+```
+
+This creates a `.mcp.json` in your project:
+```json
+{
+  "mcpServers": {
+    "MCP_DOCKER": {
+      "command": "docker",
+      "args": ["mcp", "gateway", "run"],
+      "type": "stdio"
+    }
+  }
+}
+```
+
+### Step 3: Restart and Verify
+
+```bash
+# Restart Claude Code
+claude code
+
+# Inside Claude Code, type:
+/mcp
+```
+
+You should see `MCP_DOCKER` listed with available tools.
+
+### First Run Prompt
+
+When starting Claude Code after connection, you'll see:
+```
+New MCP server found in .mcp.json: MCP_DOCKER
+MCP servers may execute code or access system resources.
+
+❯ 1. Use this and all future MCP servers in this project
+  2. Use this MCP server  
+  3. Continue without using this MCP server
+```
+
+Choose **Option 1** for automatic MCP usage in your project.
+
+### Enable MCP Servers
+
+```bash
+# List available servers (200+)
 docker mcp catalog list
 
-# Add a server
+# Add servers
 docker mcp server add github
-
-# Connect to a client
-docker mcp client connect claude-code
+docker mcp server add filesystem
+docker mcp server add atlassian
 
 # Run gateway for custom apps
 docker mcp gateway run
@@ -136,12 +193,100 @@ services:
       - MCP_SERVERS=brave-search,fetch,github
 ```
 
+## 🎯 Real-World Demo: TODO-to-Jira Automation
+
+This example shows the power of orchestrating multiple MCP servers. We'll automatically convert TODO comments in a codebase into tracked Jira tickets.
+
+### Required MCP Servers
+
+| Server | Purpose |
+|--------|---------|
+| **Filesystem** | Scan codebase, read source files |
+| **GitHub** | Run `git blame`, extract author info |
+| **Atlassian** | Create and manage Jira issues |
+
+### Configure Atlassian MCP
+
+1. Docker Desktop → MCP Toolkit → Catalog → Search "Atlassian"
+2. Click **+ Add** → **Configuration** tab
+3. Set credentials:
+   - `atlassian.jira.url`: `https://yourcompany.atlassian.net`
+   - `atlassian.jira.username`: Your email
+   - API token in Secrets section
+4. Click **Start Server**
+
+### Configure GitHub MCP
+
+**OAuth (Recommended):**
+1. Add GitHub Official from Catalog
+2. Select OAuth authentication
+3. Click "authorize with GitHub OAuth provider"
+4. Complete GitHub authorization flow
+
+**Personal Access Token:**
+```bash
+docker mcp secret set GITHUB.PERSONAL_ACCESS_TOKEN=github_pat_YOUR_TOKEN
+```
+
+### Configure Filesystem MCP
+
+1. Add Filesystem (Reference) from Catalog
+2. Under `filesystem.paths`, add your project directory
+3. Click **Start Server**
+
+### The Prompt
+
+Paste this into Claude Code:
+
+```
+Scan this codebase for all TODO and FIXME comments.
+For each one:
+1. Extract the comment and surrounding code context (5 lines before/after)
+2. Use git blame to identify who wrote it and when
+3. Determine priority based on keywords:
+   - High: "race condition", "data loss", "security", "failure", "crash"
+   - Medium: "performance", "slow", "cache", "optimization"
+   - Low: "documentation", "refactor", "cleanup"
+4. Create a Jira issue with:
+   - Project: TD
+   - Issue Type: Task
+   - Summary: Extract from the TODO/FIXME comment
+   - Description: Include code context and explanation
+   - Priority: Based on categorization above
+   - Labels: ["tech-debt"]
+   - Add a comment with link to exact GitHub file and line number
+
+Provide a summary showing:
+- Total TODOs/FIXMEs found
+- Breakdown by priority (High/Medium/Low)
+- List of created Jira issues with links
+```
+
+### What Happens
+
+Claude Code orchestrates all three MCP servers:
+1. **Filesystem MCP** scans `src/` directory
+2. **GitHub MCP** runs `git blame` for each TODO
+3. **Atlassian MCP** creates Jira issues with full context
+
+**Time comparison:**
+- Manual process: ~20-30 minutes
+- With MCP automation: ~2 minutes
+
+## 📊 Workflow Comparisons
+
+| Task | Before MCP | After MCP | Time Saved |
+|------|-----------|-----------|------------|
+| Debug checkout failures | Copy SQL → Run → Paste results → Draft issue → Create in GitHub → Notify Slack | "Why are checkouts failing?" → Done with issue link | 15 min → 2 min |
+| Investigate performance | Check dashboards → Export logs → Analyze → Document → Create Jira | "Why are API times spiking?" → PR with fix opened | 20 min → 3 min |
+| Security code review | Manual review → Run scanner → Document → Post comments → Create ticket | "Review PR #234 for security" → Inline comments + ticket | 25 min → 4 min |
+
 ## 📚 Available MCP Servers (Highlights)
 
 ### Development & Code
-- **GitHub** - Issues, PRs, repository management
+- **GitHub** - Issues, PRs, repository management (37+ tools)
 - **GitLab** - CI/CD, merge requests
-- **Filesystem** - Local file access (sandboxed)
+- **Filesystem** - Local file access (sandboxed to configured paths)
 
 ### Data & Search
 - **Brave Search** - Web search capabilities
@@ -151,7 +296,7 @@ services:
 ### Productivity
 - **Notion** - Note and document management
 - **Slack** - Team communication
-- **Atlassian** - Jira, Confluence integration
+- **Atlassian** - Jira (37 tools), Confluence integration
 
 ### AI & ML
 - **Anthropic** - Claude API access
@@ -223,9 +368,9 @@ npx @anthropic-ai/mcp-inspector
 - **MCP Gateway Repo**: https://github.com/docker/mcp-gateway
 - **MCP Protocol Spec**: https://modelcontextprotocol.io
 - **Docker Blog Posts**:
-  - MCP with Claude Code
-  - MCP with Gemini CLI
-  - MCP with OpenAI Codex
+  - [How to Add MCP Servers to Claude Code](https://www.docker.com/blog/how-to-add-mcp-servers-to-claude-code-with-docker-mcp-toolkit/) - Comprehensive setup guide
+  - [Dynamic MCPs with Docker](https://www.docker.com/blog/dynamic-mcps-with-docker/) - Smart search and code mode
+  - [A New Approach for Coding Agent Safety](https://www.docker.com/blog/coding-agent-safety/) - Security considerations
 
 ## 🧬 Alignment with SoulSketch Philosophy
 
