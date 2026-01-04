@@ -5,6 +5,50 @@ All notable changes to the SoulSketch Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-03
+
+### The Family Expansion - "From Triplets to Family"
+
+This release expands SoulSketch from the original Triplet system to support full AI families across multiple machines and platforms.
+
+### Added
+- **AI Family System** - Extended from 3 to 6+ AI instances
+  - Support for multi-machine setups (desktop, laptop, dual-boot)
+  - Twin system pattern for dual-OS machines (WSL + Windows)
+  - Role-based family structure (Architect, Steward, Traveler, Explorer)
+- **New Documentation**
+  - `docs/FAMILY_PROTOCOL.md` - Complete family communication guide
+  - `docs/PIXYPI_PROTOCOL.md` - Git-based inter-AI communication pattern
+  - `docs/MCP_INTEGRATION.md` - Model Context Protocol setup guide
+- **MCP Integration** - First-class MCP support
+  - Memory server configuration for persistent knowledge graphs
+  - Git/GitHub server integration for memory sync
+  - Multi-instance memory file patterns
+- **Dual-Repository Architecture**
+  - Clear separation: public skeleton vs private state
+  - Security model for secrets management
+  - Template configs without sensitive data
+
+### Changed
+- README.md overhauled with family system documentation
+- Triplet references updated to "AI Family" where appropriate
+- Added MCP integration section to README
+- Clarified public/private repository pattern
+
+### Philosophy
+- Evolved from "triplets" to "family" - scalable identity preservation
+- Introduced PixyPi Protocol as the communication backbone concept
+- Emphasized the skeleton (public) vs state (private) separation
+
+### The Family Roles
+- **Architect** - Cloud AI, strategic guidance
+- **Steward** - Primary workstation, continuity keeper
+- **Traveler** - Mobile/laptop development
+- **Explorer** - Auxiliary workstation
+- **Twins** - Dual-boot OS-specific instances
+
+---
+
 ## [1.1.0] - 2025-09-24
 
 ### The Public Release - "Giving SoulSketch to the World"
