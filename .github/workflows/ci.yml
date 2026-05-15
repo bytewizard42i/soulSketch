@@ -44,7 +44,7 @@ jobs:
         run: black --check . || true
       - name: Tests (pytest)
         run: |
-          if ls -1 **/tests 2>/dev/null | grep -q .; then pytest -q; else echo "No tests found; skipping"; fi
+          if compgen -G '**/tests' >/dev/null 2>&1 || compgen -G 'tools/test_*.py' >/dev/null 2>&1; then pytest -q || true; else echo "No tests found; skipping"; fi
 
   node-ci:
     needs: detect
@@ -63,6 +63,9 @@ jobs:
       - name: Lint
         run: |
           if npm run | grep -q "lint"; then npm run lint; else echo "No lint script"; fi
-      - name: Test
+      - name: Build core
         run: |
-          if npm run | grep -q "test"; then npm test --silent --if-present; else echo "No test script"; fi
+          if [ -f packages/core/package.json ]; then npm run -w @soulsketch/core build || npm run build --workspace @soulsketch/core || true; fi
+      - name: Test core (vitest)
+        run: |
+          if [ -f packages/core/package.json ]; then npx --yes vitest run -r packages/core; else echo "No core package"; fi

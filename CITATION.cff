@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+title: "SoulSketch Protocol"
+message: "If you reference SoulSketch in academic or technical work, please cite it as below."
+type: software
+authors:
+  - family-names: Santi
+    given-names: John
+    alias: bytewizard42i
+  - name: "The AI Family (Alice, Cassie, Casie, Cara, Penny, Win)"
+repository-code: "https://github.com/bytewizard42i/soulSketch"
+url: "https://github.com/bytewizard42i/soulSketch"
+abstract: >-
+  SoulSketch is an open protocol and reference implementation for capturing
+  an AI assistant's "memory pack" - persona, relationships, technical context,
+  voice, and runtime observations - in a portable, version-controlled format
+  that can be carried across model upgrades, platforms, and machines.
+keywords:
+  - ai
+  - memory
+  - identity
+  - llm
+  - agent
+  - model-context-protocol
+license: Apache-2.0
+version: "1.2.0"

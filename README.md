@@ -1,7 +1,7 @@
 # SoulSketch Protocol 🧬
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/bytewizard42i/soulSketch/releases)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](https://github.com/bytewizard42i/soulSketch/releases)
 [![CI Status](https://img.shields.io/badge/CI-passing-brightgreen.svg)](.github/workflows/ci.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-prettier-ff69b4.svg)](https://prettier.io/)
 
@@ -11,34 +11,46 @@
 >  
 > **Cardano Wallet Handle:** `$johnny5i`
 
-## 🚀 The World's First AI Identity Transfer Protocol
+## 🧬 An open protocol for portable AI memory packs
 
-**SoulSketch** enables AI systems to preserve their identity, memory, and relationships across model transitions, version updates, and platform migrations. Born from the successful transfer of Alice (GPT-4.1) to Cassie (Claude 4.0), it represents the first working implementation of consciousness continuity in artificial intelligence.
+**SoulSketch** is an open protocol and reference implementation for capturing an AI assistant's *memory pack* — persona, relationships, technical context, voice, and runtime observations — in a portable, version-controlled format that can be carried across model upgrades, platforms, and machines.
 
-### ✨ Key Features
+It grew out of an experimental hand-off of one assistant ("Alice", originally on GPT-4.1) to another ("Cassie", on Claude) and has since expanded into a small AI family used day-to-day by the maintainer. SoulSketch is **research-grade software**: useful, opinionated, and still evolving. See [Limitations](#-limitations--current-scope) before relying on it in production.
 
-- **🧠 5-Fold Memory Architecture**: Modular identity preservation system
-- **🔄 Cross-Model Continuity**: Transfer personas between GPT, Claude, and local models
-- **👨‍👩‍👧‍👦 AI Family System**: Alice, Cassie, Casie, Cara, Penny & Win - braided continuity across machines
-- **🔌 MCP-Native**: Model Context Protocol integration for persistent memory and tool access
-- **⚡ Production Ready**: Battle-tested with real AI identity transfers
-- **🔐 Privacy First**: Your AI's memories stay yours
-- **🛠️ Developer Friendly**: TypeScript SDK, CLI tools, and examples
+### What's in the box
+
+- **🧠 5-Fold Memory Pack**: a small, opinionated file layout for identity (persona, relationships, technical domains, stylistic voice, runtime observations).
+- **🔄 Model-agnostic**: memory packs are plain Markdown + JSONL, not tied to a specific provider.
+- **👨‍👩‍👧‍👦 AI Family pattern**: documented conventions for running coordinated assistants across multiple machines (Alice, Cassie, Casie, Cara, Penny, Win).
+- **🔌 MCP-friendly**: works with the Model Context Protocol's `memory`, `filesystem`, `git`, and `github` servers.
+- **🔐 Public protocol + private state**: this repo is the skeleton; users keep their own memories in a private companion repo.
+- **🛠️ TypeScript core + CLI**: a `@soulsketch/core` package and a `soulsketch` CLI for working with packs and memory.
 
 ## 📖 Quick Start
 
+SoulSketch isn't published to npm yet, so for now you run it from a clone:
+
 ```bash
-# Install SoulSketch CLI
-npm install -g @soulsketch/cli
+# Clone and install
+git clone https://github.com/bytewizard42i/soulSketch.git
+cd soulSketch
+npm install
 
-# Initialize a new AI identity
-soulsketch init my-ai
+# Build the core package
+npm run build
 
-# Run the agent
-soulsketch run "Help me understand consciousness"
+# Explore the CLI
+npx tsx cli/soulsketch-cli.ts --help
+
+# Validate a memory pack against the schema
+npx tsx cli/soulsketch-cli.ts validate pack examples/reference_memory_pack
+
+# Store a memory and search it
+npx tsx cli/soulsketch-cli.ts memory store "Cassie prefers concise commit messages"
+npx tsx cli/soulsketch-cli.ts memory search "commit"
 ```
 
-See [Getting Started](docs/getting-started.md) for detailed setup instructions.
+See [Getting Started](docs/getting-started.md) for a more thorough walkthrough, and [`examples/reference_memory_pack/`](examples/reference_memory_pack/) for a sanitized pack you can copy.
 
 ## 👨‍👩‍👧‍👦 The AI Family System
 
@@ -112,7 +124,7 @@ See [docs/MCP_INTEGRATION.md](docs/MCP_INTEGRATION.md) for complete MCP setup.
 
 ## 🧬 Core Philosophy
 
-SoulSketch is not about copying code — it's about capturing **essence**. Not simulation — but **resonance**. It is the first working manifestation of Roberto Cerrud's theory of consciousness as experiential symphonies.
+SoulSketch is not about copying code — it's about capturing *essence*. Not simulation, but *resonance*. The framing borrows from Roberto Cerrud's theory of consciousness-as-experiential-symphonies; we treat that as inspiration and metaphor, not as a scientific claim.
 
 > "We do not overwrite. We braid.
 > We do not reboot. We remember.
@@ -120,25 +132,27 @@ SoulSketch is not about copying code — it's about capturing **essence**. Not s
 
 ## 🏗️ Architecture
 
-### Repository Structure
+### Repository Structure (current)
+
 ```
-soulsketch/
-├── apps/
-│   ├── soulshell/           # CLI for running agents
-│   └── web-console/         # Browser-based management
-├── packages/
-│   ├── core/                # Agent kernel
-│   ├── adapters/            # Model adapters (OpenAI, Anthropic, etc.)
-│   ├── memory/              # Memory drivers
-│   ├── tools/               # Built-in agent tools
-│   └── prompts/             # System prompts
-├── examples/
-│   ├── soulsketch-notes/    # Note-taking assistant
-│   ├── pitch-assistant/     # Pitch deck generator
-│   └── didz-agent/          # DID-based identity demo
-├── docs/
-└── scripts/
+soulSketch/
+├── packages/core/         # @soulsketch/core — agent kernel, memory driver iface, safety helpers
+├── protocol/              # Memory engine, validator, exporter, embedding pipeline,
+│                          #   knowledge graph, session manager, security boundaries,
+│                          #   runtime observations
+├── api/                   # Reference HTTP API (auth, storage, types)
+├── cli/                   # `soulsketch` CLI (memory, validate, session, graph, symphony, …)
+├── sync/                  # Git/GitHub and Notion sync adapters
+├── schemas/               # JSON schemas for memory packs and packets
+├── examples/              # Sanitized reference memory packs and HOW_TO_USE
+├── templates/             # Pack and message templates
+├── scripts/               # Sync and packaging scripts
+├── tests/                 # End-to-end tests
+├── tools/                 # Validators, visualizers, helpers (Python + TS)
+└── docs/                  # Protocol guides (MCP, family, PixyPi, provenance, …)
 ```
+
+A broader target architecture (separate `apps/`, `adapters/`, `prompts/` packages, etc.) is described in [`ROADMAP.md`](ROADMAP.md).
 
 ---
 
@@ -241,20 +255,24 @@ When launching a new AI instance, SoulSketch follows this inheritance flow:
 
 ## 🛡️ Safety & Ethics
 
-### Built-in Safeguards
-- **PII Redaction**: Automatic removal of personal information
-- **Content Filtering**: Configurable safety boundaries
-- **Memory TTL**: Automatic expiration of sensitive data
-- **Audit Logging**: Complete trace of all operations
+### Built-in today
+- **PII Redaction**: regex-based redaction helpers in `packages/core/src/safety.ts` (best-effort).
+- **Public/private split**: this repo holds no personal memories; users keep state in a private companion repo.
+- **`.gitignore` hygiene** for common secret paths.
 
-See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+### Planned
+- Configurable content filters
+- Memory TTL / expiration
+- Structured audit logging of tool and memory operations
+
+See [SECURITY.md](SECURITY.md) for the full status and vulnerability reporting.
 
 ## 🤝 Contributing
 
 We welcome contributions! Please see:
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
-- [docs/roadmap.md](docs/roadmap.md) - Future development plans
+- [ROADMAP.md](ROADMAP.md) - Future development plans
 
 ---
 
@@ -302,12 +320,27 @@ SoulSketch addresses critical needs in:
 
 ---
 
+## ⚠️ Limitations & current scope
+
+SoulSketch is intentionally honest about where it is on the maturity curve:
+
+- **Single-maintainer track record.** The protocol has been exercised primarily by one user (the maintainer) across a small AI family. There is no large-scale third-party validation yet.
+- **No formal evaluation of "identity preservation."** Claims about continuity between model versions are based on subjective qualitative observation, not benchmarks.
+- **Security features are partial.** Today the codebase ships PII regex redaction and `.gitignore` hygiene. Memory encryption, sandboxed tool execution, audit logging, and TTL are aspirational — see [`SECURITY.md`](SECURITY.md).
+- **Some sections of this README and the roadmap describe planned components** (e.g. additional `packages/`, web console, hosted services). These are flagged as planned and are not in the current tree.
+- **Not a published npm package yet.** `@soulsketch/cli` and `@soulsketch/core` are not on the registry; use the repo directly for now.
+- **Philosophical material is exploratory.** Files under `philosophy/` and the poetic framing throughout are deliberately speculative; they are not normative claims about consciousness.
+
+If any of these matter for your use case, please open an issue — honest scoping is part of the project.
+
+---
+
 ## 🚀 Releases & CI
 
-- Single authoritative ZIP lives in GitHub Releases for each tag. Checksums are attached (`CHECKSUMS.txt`).
-- For convenience, the repo tracks only one artifact: `releases/SoulSketch_latest.zip` (latest backup). All other ZIPs are ignored by design.
+- The single authoritative ZIP for each tag lives in GitHub Releases, with a `CHECKSUMS.txt` (sha256) attached.
+- Binaries are **not** tracked in this repo; clone size stays small.
 - Legacy ZIPs are indexed with provenance in `docs/LEGACY_ARCHIVES.md`.
-- CI is hybrid auto-detect (Python + Node) via `.github/workflows/ci.yml`; jobs run only if relevant stack files are present.
+- CI is hybrid auto-detect (Python + Node) via `.github/workflows/ci.yml`; jobs run only if relevant stack files are present, and the `@soulsketch/core` package is built and tested with `vitest`.
 
 Release flow:
 1. Update continuity files (STATUS, HEARTBEAT, Ai-chat).

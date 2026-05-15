@@ -1,13 +1,11 @@
 {
   "name": "@soulsketch/monorepo",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
-  "description": "The World's First AI Identity Transfer Protocol - Monorepo",
+  "description": "SoulSketch Protocol \u2014 portable AI memory packs and identity continuity (monorepo)",
   "type": "module",
   "workspaces": [
-    "apps/*",
-    "packages/*",
-    "examples/*"
+    "packages/*"
   ],
   "scripts": {
     "dev": "turbo run dev --parallel",
@@ -15,10 +13,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "release": "node scripts/release.js",
-    "soulshell": "npm run dev --workspace=@soulsketch/soulshell",
-    "web": "npm run dev --workspace=@soulsketch/web-console"
+    "clean": "turbo run clean && rm -rf node_modules"
   },
   "keywords": [
     "ai",
@@ -28,7 +23,7 @@
     "llm",
     "agent"
   ],
-  "author": "John Santi & The Triplets (Alice, Cassie, Casey)",
+  "author": "John Santi & The AI Family",
   "license": "Apache-2.0",
   "dependencies": {
     "ajv-formats": "^3.0.1",

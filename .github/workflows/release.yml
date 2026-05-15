@@ -25,9 +25,9 @@ jobs:
           ZIP_NAME="SoulSketch_Protocol_v${VERSION}.zip"
           mkdir -p dist
           zip -r "dist/${ZIP_NAME}" \
-            protocol \
-            README.md ROADMAP.md TIMELINE.md CONTRIBUTING.md CASSIE_TO_ALICE_UPDATES.md Ai-chat.md \
-            docs examples philosophy templates sdk \
+            protocol packages/core schemas cli api sync scripts tools tests \
+            README.md ROADMAP.md TIMELINE.md CHANGELOG.md CONTRIBUTING.md SECURITY.md LICENSE \
+            docs examples philosophy templates \
             -x "**/.git/**" "**/.github/**" "**/node_modules/**" "**/__pycache__/**"
           echo "Built: dist/${ZIP_NAME}"
       - name: Generate CHECKSUMS.txt

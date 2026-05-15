@@ -4,9 +4,9 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.1.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
-| < 1.0   | :x:                |
+| 1.2.x   | :white_check_mark: |
+| 1.1.x   | :x:                |
+| < 1.1   | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -43,28 +43,37 @@ We maintain a Security Hall of Fame to recognize responsible security researcher
 
 ## Security Features
 
-### Built-in Protections
+### Implemented today
 
-- **Memory Encryption**: Optional AES-256 encryption for sensitive memories
-- **PII Redaction**: Automatic removal of personal information
-- **Sandboxed Execution**: Tool calls run in isolated contexts
-- **Audit Logging**: Complete trace of all operations
-- **Memory TTL**: Automatic expiration of sensitive data
+- **PII Redaction**: Regex-based redaction of common identifiers (emails, phones, SSNs, credit cards, IPv4) in `packages/core/src/safety.ts`. This is a best-effort filter, not a guarantee.
+- **`.gitignore` hygiene**: Sensitive paths (`.env*`, `secrets/`, `private_memories/`, `temp_memories/`, etc.) are excluded by default.
+- **Public/private split**: This repo is the public skeleton; users are expected to keep memory state in a separate private repo (see `README.md`).
+
+### Planned / not yet implemented
+
+These have appeared in earlier docs as aspirational features. They are **not** in the current code and should not be relied upon:
+
+- **Memory Encryption** (e.g. AES-256 at rest)
+- **Sandboxed Execution** for tool calls
+- **Structured Audit Logging**
+- **Memory TTL / automatic expiration**
+
+If you depend on any of these, implement them at your integration layer for now. Contributions welcome — see `ROADMAP.md`.
 
 ### Best Practices
 
-1. **API Keys**: Never commit API keys; use environment variables
-2. **Memory Storage**: Enable encryption for production deployments
-3. **Access Control**: Implement proper authentication for web console
-4. **Updates**: Keep SoulSketch updated to latest stable version
-5. **Monitoring**: Enable audit logging in production
+1. **API Keys**: Never commit API keys; use environment variables.
+2. **Memory Storage**: Treat memory packs as sensitive; encrypt at rest in your own infrastructure until built-in encryption lands.
+3. **Access Control**: If you expose any management surface (HTTP, CLI on a shared host), put your own authentication in front of it.
+4. **Updates**: Track the latest stable tag.
+5. **Monitoring**: Add your own logging around tool calls and memory writes.
 
 ## Supply Chain & Releases
 
 - Single authoritative ZIP per tag in GitHub Releases
-- `CHECKSUMS.txt` is generated and signed for each release
-- Provenance documented in `docs/LEGACY_ARCHIVES.md`
-- All dependencies are regularly audited via Dependabot
+- `CHECKSUMS.txt` (sha256) is generated and attached to each release
+- Legacy artifact provenance is documented in `docs/LEGACY_ARCHIVES.md`
+- Release signing and Dependabot policies are planned but not yet enforced
 
 ## Vulnerability Disclosure
 
