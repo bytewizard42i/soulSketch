@@ -5,7 +5,7 @@
  */
 
 import { EventEmitter } from 'events';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { MemoryEngine, SoulMemory, MemoryPack } from './memory-engine.js';

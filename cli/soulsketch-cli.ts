@@ -7,13 +7,13 @@
  */
 
 import { Command } from 'commander';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
-import * as chalk from 'chalk';
-import * as ora from 'ora';
+import chalk from 'chalk';
+import ora from 'ora';
 import { table } from 'table';
-import * as inquirer from 'inquirer';
-import { MemoryEngine, MemoryPack, SoulMemory } from '../protocol/memory-engine.js';
+import inquirer from 'inquirer';
+import { MemoryEngine } from '../protocol/memory-engine.js';
 import { SessionManager } from '../protocol/session-manager.js';
 import { MemoryValidator } from '../protocol/memory-validator.js';
 import { KnowledgeGraph } from '../protocol/knowledge-graph.js';
@@ -62,13 +62,12 @@ memoryCmd
     
     try {
       const memory = await memoryEngine.storeMemory({
+        category: options.type,
         content,
-        type: options.type,
         embedding: options.embedding ? JSON.parse(options.embedding) : undefined
       });
       
-      spinner.succeed(chalk.green(`Memory stored successfully: ${memory.id}`));
-      console.log(chalk.gray(`Hash: ${memory.hash}`));
+      spinner.succeed(chalk.green(`Memory stored successfully: ${memory}`));
     } catch (error) {
       spinner.fail(chalk.red(`Failed to store memory: ${error.message}`));
       process.exit(1);
@@ -104,7 +103,7 @@ memoryCmd
         ...results.map(m => [
           m.id.substring(0, 20) + '...',
           m.type,
-          m.content.substring(0, 50) + '...',
+          JSON.stringify(m.content).substring(0, 50) + '...',
           m.resonanceScore?.toFixed(2) || 'N/A'
         ])
       ];
@@ -155,15 +154,24 @@ const validateCmd = program
   .description('Validate and repair memory integrity');
 
 validateCmd
-  .command('pack <file>')
-  .description('Validate a memory pack file')
+  .command('pack <path>')
+  .description('Validate a memory pack JSON file or 5-file SoulSketch directory')
   .option('-r, --repair', 'Attempt to repair corrupted memories')
   .option('-s, --strict', 'Use strict validation mode')
-  .action(async (file, options) => {
+  .action(async (packPath, options) => {
     const spinner = ora('Loading memory pack...').start();
     
     try {
-      const pack = await fs.readJson(file);
+      const stats = await fs.stat(packPath);
+      if (stats.isDirectory()) {
+        spinner.text = 'Validating 5-file memory pack directory...';
+        const result = await validateFiveFileMemoryPack(packPath);
+        spinner.stop();
+        console.log(formatFiveFileValidationReport(result));
+        process.exit(result.valid ? 0 : 1);
+      }
+
+      const pack = await fs.readJson(packPath);
       spinner.text = 'Validating memory pack...';
       
       const validator = new MemoryValidator({
@@ -181,7 +189,7 @@ validateCmd
         const repairSpinner = ora('Attempting repairs...').start();
         const repaired = await validator.repairMemoryPack(pack);
         
-        const repairedPath = file.replace('.json', '-repaired.json');
+        const repairedPath = packPath.replace('.json', '-repaired.json');
         await fs.writeJson(repairedPath, repaired, { spaces: 2 });
         
         repairSpinner.succeed(chalk.green(`Repaired pack saved to: ${repairedPath}`));
@@ -426,9 +434,15 @@ async function interactiveValidate() {
   ]);
   
   try {
-    const pack = await fs.readJson(file);
-    const result = await validator.validateMemoryPack(pack);
-    console.log(validator.generateReport(result));
+    const stats = await fs.stat(file);
+    if (stats.isDirectory()) {
+      const result = await validateFiveFileMemoryPack(file);
+      console.log(formatFiveFileValidationReport(result));
+    } else {
+      const pack = await fs.readJson(file);
+      const result = await validator.validateMemoryPack(pack);
+      console.log(validator.generateReport(result));
+    }
   } catch (error) {
     console.log(chalk.red(`Validation failed: ${error.message}`));
   }
@@ -458,10 +472,112 @@ process.on('unhandledRejection', (error: Error) => {
   process.exit(1);
 });
 
-// Parse arguments
+type FiveFileValidationResult = {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  filesChecked: number;
+};
+
+const requiredMemoryPackFiles = [
+  'persona.md',
+  'relationship_dynamics.md',
+  'technical_domains.md',
+  'stylistic_voice.md',
+  'runtime_observations.jsonl'
+] as const;
+
+async function validateFiveFileMemoryPack(packDirectory: string): Promise<FiveFileValidationResult> {
+  const result: FiveFileValidationResult = {
+    valid: true,
+    errors: [],
+    warnings: [],
+    filesChecked: 0
+  };
+
+  for (const fileName of requiredMemoryPackFiles) {
+    const filePath = path.join(packDirectory, fileName);
+    if (!await fs.pathExists(filePath)) {
+      result.valid = false;
+      result.errors.push(`Missing required file: ${fileName}`);
+      continue;
+    }
+
+    const content = await fs.readFile(filePath, 'utf8');
+    result.filesChecked++;
+
+    if (content.trim().length === 0) {
+      result.valid = false;
+      result.errors.push(`${fileName} is empty`);
+    }
+
+    if (fileName.endsWith('.md') && !content.includes('#')) {
+      result.warnings.push(`${fileName} has no Markdown heading`);
+    }
+
+    if (fileName === 'runtime_observations.jsonl') {
+      validateRuntimeObservations(content, result);
+    }
+  }
+
+  return result;
+}
+
+function validateRuntimeObservations(content: string, result: FiveFileValidationResult): void {
+  const lines = content
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    result.warnings.push('runtime_observations.jsonl has no observations yet');
+    return;
+  }
+
+  lines.forEach((line, index) => {
+    try {
+      const observation = JSON.parse(line);
+      if (!observation.date && !observation.timestamp) {
+        result.warnings.push(`runtime_observations.jsonl line ${index + 1} has no date or timestamp`);
+      }
+      if (!observation.note && !observation.observation && !observation.content) {
+        result.warnings.push(`runtime_observations.jsonl line ${index + 1} has no note-like field`);
+      }
+    } catch (error) {
+      result.valid = false;
+      result.errors.push(`runtime_observations.jsonl line ${index + 1} is invalid JSON`);
+    }
+  });
+}
+
+function formatFiveFileValidationReport(result: FiveFileValidationResult): string {
+  const lines = [
+    '=== SoulSketch 5-File Memory Pack Validation Report ===',
+    `Status: ${result.valid ? 'VALID' : 'INVALID'}`,
+    `Files checked: ${result.filesChecked}`,
+    ''
+  ];
+
+  if (result.errors.length > 0) {
+    lines.push(`Errors (${result.errors.length}):`);
+    result.errors.forEach((error) => lines.push(`  - ${error}`));
+    lines.push('');
+  }
+
+  if (result.warnings.length > 0) {
+    lines.push(`Warnings (${result.warnings.length}):`);
+    result.warnings.forEach((warning) => lines.push(`  - ${warning}`));
+    lines.push('');
+  }
+
+  lines.push('=======================================================');
+  return lines.join('\n');
+}
+
+// Parse arguments after every helper is initialized.
 program.parse(process.argv);
 
-// Show help if no command provided
+// Show help if no command provided.
 if (!process.argv.slice(2).length) {
   console.log(chalk.cyan(LOGO));
   program.outputHelp();

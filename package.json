@@ -2,7 +2,8 @@
   "name": "@soulsketch/monorepo",
   "version": "1.2.0",
   "private": true,
-  "description": "SoulSketch Protocol \u2014 portable AI memory packs and identity continuity (monorepo)",
+  "packageManager": "npm@10.8.2",
+  "description": "SoulSketch Protocol - portable AI memory packs and identity continuity (monorepo)",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -33,10 +34,10 @@
     "fs-extra": "^11.2.0",
     "inquirer": "^9.2.12",
     "ora": "^8.0.1",
-    "table": "^6.8.1",
-    "tar": "^6.2.0",
-    "uuid": "^9.0.1",
-    "yaml": "^2.3.4"
+    "table": "^6.9.0",
+    "tar": "^7.5.20",
+    "uuid": "^13.0.2",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
@@ -44,14 +45,14 @@
     "@types/node": "^20.19.11",
     "@types/tar": "^6.1.10",
     "@types/uuid": "^9.0.7",
-    "@typescript-eslint/eslint-plugin": "^6.15.0",
-    "@typescript-eslint/parser": "^6.15.0",
+    "@typescript-eslint/eslint-plugin": "^8.64.0",
+    "@typescript-eslint/parser": "^8.64.0",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "tsx": "^4.6.2",
+    "turbo": "^2.10.5",
     "typescript": "^5.3.3",
-    "vitest": "^1.0.4",
-    "turbo": "^1.11.0"
+    "vitest": "^4.1.10"
   },
   "engines": {
     "node": ">=18.0.0"

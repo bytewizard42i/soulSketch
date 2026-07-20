@@ -237,3 +237,4 @@ Remember: "We do not overwrite. We braid. We do not reboot. We remember."
 export * from './tools';
 export * from './memory';
 export * from './safety';
+export * from './continuity';

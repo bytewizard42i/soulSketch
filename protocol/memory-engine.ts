@@ -5,7 +5,7 @@
  */
 
 import { EventEmitter } from 'events';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 import { createHash } from 'crypto';
 import { homedir } from 'os';
@@ -57,7 +57,7 @@ export class MemoryEngine extends EventEmitter {
   }
 
   private async ensureMemoryStructure(): Promise<void> {
-    const dirs = ['persona', 'relationships', 'technical', 'stylistic', 'runtime', 'vectors', 'sessions'];
+    const dirs = ['persona', 'relationship', 'technical', 'stylistic', 'runtime', 'vectors', 'sessions'];
     for (const dir of dirs) {
       await fs.ensureDir(path.join(this.memoryPath, dir));
     }
@@ -124,6 +124,7 @@ export class MemoryEngine extends EventEmitter {
 
     // Store in appropriate directory
     const filePath = path.join(this.memoryPath, memory.category, `${memory.id}.json`);
+    await fs.ensureDir(path.dirname(filePath));
     await fs.writeJson(filePath, memory, { spaces: 2 });
 
     // Update vector store if embedding provided
@@ -172,6 +173,9 @@ export class MemoryEngine extends EventEmitter {
     
     for (const type of types) {
       const dir = path.join(this.memoryPath, type);
+      if (!await fs.pathExists(dir)) {
+        continue;
+      }
       const files = await fs.readdir(dir);
       
       for (const file of files) {

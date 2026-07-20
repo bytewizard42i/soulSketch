@@ -8,8 +8,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "vitest",
-    "lint": "eslint . --ext .ts",
+    "test": "vitest run",
+    "lint": "eslint src --ext .ts",
     "clean": "rm -rf dist"
   },
   "keywords": [
@@ -22,13 +22,13 @@
   "author": "John Santi & The AI Family",
   "license": "Apache-2.0",
   "dependencies": {
-    "zod": "^3.22.0",
-    "uuid": "^9.0.1"
+    "uuid": "^13.0.2",
+    "zod": "^3.22.0"
   },
   "devDependencies": {
     "@types/node": "^20.19.11",
     "typescript": "^5.3.3",
-    "vitest": "^1.0.4"
+    "vitest": "^4.1.10"
   },
   "publishConfig": {
     "access": "public"
