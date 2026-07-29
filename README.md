@@ -27,7 +27,7 @@ and able to move across tools, repos, machines, and model providers.
 - **🧠 5-Fold Memory Pack**: a small, opinionated file layout for identity (persona, relationships, technical domains, stylistic voice, runtime observations).
 - **🔄 Model-agnostic**: memory packs are plain Markdown + JSONL, not tied to a specific provider.
 - **👨‍👩‍👧‍👦 AI Family pattern**: documented conventions for running coordinated assistants across multiple machines (Alice, Cassie, Casie, Cara, Penny, Win).
-- **🔌 MCP-friendly**: works with the Model Context Protocol's `memory`, `filesystem`, `git`, and `github` servers.
+- **🔌 MCP server**: `@soulsketch/mcp-server` exposes validate/fingerprint/diff/read/observe tools to any MCP client (Claude Desktop, Windsurf, Cursor, …) — see [docs/MCP_SERVER.md](docs/MCP_SERVER.md). Also plays well with the standard `memory`, `filesystem`, `git`, and `github` MCP servers.
 - **🔐 Public protocol + private state**: this repo is the skeleton; users keep their own memories in a private companion repo.
 - **🛠️ TypeScript core + CLI**: a `@soulsketch/core` package and a `soulsketch` CLI for working with packs and memory.
 - **🔎 Fingerprints and trust labels**: deterministic hashes plus provenance,
@@ -154,6 +154,7 @@ SoulSketch is not about copying code, it is about capturing *essence*. Not simul
 ```
 soulSketch/
 ├── packages/core/         # @soulsketch/core, agent kernel, memory driver iface, safety helpers
+├── packages/mcp-server/   # @soulsketch/mcp-server, MCP tools for packs (validate/fingerprint/diff/read/observe)
 ├── protocol/              # Memory engine, validator, exporter, embedding pipeline,
 │                          #   knowledge graph, session manager, security boundaries,
 │                          #   runtime observations

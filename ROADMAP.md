@@ -71,11 +71,13 @@ Goal: make SoulSketch useful before it becomes a platform.
 
 Goal: make continuity available inside the tools people already use.
 
-- [ ] Build `@soulsketch/mcp-server`.
-- [ ] Expose MCP tools for remembering, recalling, validating, fingerprinting,
-  handoff generation, and Git sync.
-- [ ] Add setup guides for Codex, Windsurf, Cursor, Claude Desktop, and VS Code.
-- [ ] Keep the storage model local-first, Git-first, and readable without a hosted
+- [x] Build `@soulsketch/mcp-server`.
+- [x] Expose MCP tools for remembering (observe), recalling (read pack),
+  validating, fingerprinting, diffing, and continuity records. (Still open:
+  handoff generation and Git sync tools.)
+- [ ] Add setup guides for Codex, Windsurf, Cursor, Claude Desktop, and VS Code
+  (generic setup documented in `docs/MCP_SERVER.md`; per-client guides pending).
+- [x] Keep the storage model local-first, Git-first, and readable without a hosted
   service.
 - [ ] Add explicit safeguards for secrets, private memories, and imported packs.
 

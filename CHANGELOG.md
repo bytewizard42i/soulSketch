@@ -8,6 +8,15 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `@soulsketch/mcp-server` (ROADMAP Phase 3): MCP stdio server exposing six
+  tools to any MCP client — `soulsketch_validate_pack`,
+  `soulsketch_fingerprint_pack`, `soulsketch_diff_packs`,
+  `soulsketch_read_pack`, `soulsketch_observe` (append-only),
+  `soulsketch_continuity_record`. Trust boundary via
+  `SOULSKETCH_ALLOWED_ROOTS`; 9 protocol-level tests; plain-language guide in
+  `docs/MCP_SERVER.md`.
+- `@soulsketch/core`: pure `validateMemoryPackContents` and `diffMemoryPacks`
+  moved into core so the CLI and MCP server share one implementation.
 - `soulsketch fingerprint <pack>`: deterministic identity fingerprint and
   per-file hashes for a 5-file memory pack directory (`--json` for scripts).
 - `soulsketch diff <packA> <packB>`: per-dimension comparison of two memory
@@ -19,6 +28,9 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
   format and what the two JSON schemas actually describe.
 
 ### Fixed
+- `@soulsketch/core` compiled output was unloadable under Node ESM: the
+  `index.ts` re-exports lacked `.js` extensions, so `dist/index.js` failed to
+  resolve its own modules. The package is now actually consumable.
 - CLI reported version `1.0.0`; it now reads the version from `package.json`
   so it can no longer drift.
 - ROADMAP checklist marked the PixyPi reference guide as unpublished even

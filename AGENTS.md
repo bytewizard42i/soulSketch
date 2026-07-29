@@ -24,7 +24,8 @@ overview and [`SECURITY.md`](SECURITY.md) for what is and isn't implemented.
 
 | Path | Purpose |
 | --- | --- |
-| `packages/core/` | Agent kernel, memory-driver interface, safety helpers. The most "production-ish" code. |
+| `packages/core/` | Agent kernel, memory-driver interface, safety helpers, pack validation/fingerprint/diff. The most "production-ish" code. |
+| `packages/mcp-server/` | `@soulsketch/mcp-server`: MCP stdio server exposing pack tools (validate, fingerprint, diff, read, observe, continuity record). |
 | `protocol/` | Protocol implementation: memory engine, validator, exporter, embedding pipeline, knowledge graph, session manager, security boundaries, runtime observations. |
 | `cli/` | `soulsketch` CLI. Real commands: `memory`, `validate pack`, `session`, `graph`, `symphony`, `interactive`. |
 | `api/` | Reference HTTP API. |

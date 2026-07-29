@@ -1,0 +1,41 @@
+{
+  "name": "@soulsketch/mcp-server",
+  "version": "1.2.0",
+  "description": "MCP server exposing SoulSketch memory pack tools (validate, fingerprint, diff, read, observe) to any MCP-capable AI client",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "soulsketch-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "lint": "eslint src --ext .ts",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "soulsketch",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "memory",
+    "identity"
+  ],
+  "author": "John Santi & The AI Family",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "@soulsketch/core": "^1.2.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "typescript": "^5.3.3",
+    "vitest": "^4.1.10"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

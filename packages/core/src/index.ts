@@ -234,7 +234,9 @@ Remember: "We do not overwrite. We braid. We do not reboot. We remember."
 /**
  * Export types and utilities
  */
-export * from './tools';
-export * from './memory';
-export * from './safety';
-export * from './continuity';
+export * from './tools.js';
+export * from './memory.js';
+export * from './safety.js';
+export * from './continuity.js';
+export * from './validation.js';
+export * from './diff.js';
