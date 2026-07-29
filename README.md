@@ -52,6 +52,12 @@ npx tsx cli/soulsketch-cli.ts --help
 # Validate a memory pack against the schema
 npx tsx cli/soulsketch-cli.ts validate pack examples/reference_memory_pack
 
+# Fingerprint a pack (deterministic identity hash + per-file hashes)
+npx tsx cli/soulsketch-cli.ts fingerprint examples/reference_memory_pack
+
+# Compare two packs and see WHICH identity dimension changed
+npx tsx cli/soulsketch-cli.ts diff examples/reference_memory_pack path/to/other_pack
+
 # Store a memory and search it
 npx tsx cli/soulsketch-cli.ts memory store "Cassie prefers concise commit messages"
 npx tsx cli/soulsketch-cli.ts memory search "commit"

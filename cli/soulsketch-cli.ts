@@ -9,6 +9,7 @@
 import { Command } from 'commander';
 import fs from 'fs-extra';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import ora from 'ora';
 import { table } from 'table';
@@ -17,9 +18,19 @@ import { MemoryEngine } from '../protocol/memory-engine.js';
 import { SessionManager } from '../protocol/session-manager.js';
 import { MemoryValidator } from '../protocol/memory-validator.js';
 import { KnowledgeGraph } from '../protocol/knowledge-graph.js';
+import {
+  computeMemoryPackFingerprint,
+  getMemoryPackFileOrder,
+  type MemoryPackFileName,
+  type MemoryPackFiles
+} from '../packages/core/src/continuity.js';
 
 const program = new Command();
-const VERSION = '1.0.0';
+
+// Read the version from the monorepo package.json so the CLI can never
+// drift out of sync with the released version again.
+const repoRootDirectory = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const VERSION: string = fs.readJsonSync(path.join(repoRootDirectory, 'package.json')).version;
 
 // ASCII art logo
 const LOGO = `
@@ -203,6 +214,77 @@ validateCmd
   });
 
 /**
+ * Fingerprint Command
+ * Computes the deterministic identity fingerprint of a 5-file memory pack.
+ * The fingerprint is safe to publish: it refers to a memory state without
+ * revealing its contents (see packages/core/src/continuity.ts).
+ */
+program
+  .command('fingerprint <pack>')
+  .description('Compute the deterministic fingerprint of a 5-file memory pack directory')
+  .option('-j, --json', 'Output machine-readable JSON')
+  .action(async (packPath, options) => {
+    try {
+      const memoryPackFiles = await loadFiveFileMemoryPack(packPath);
+      const { fingerprint, fileHashes } = computeMemoryPackFingerprint(memoryPackFiles);
+
+      if (options.json) {
+        console.log(JSON.stringify({ pack: path.resolve(packPath), fingerprint, fileHashes }, null, 2));
+        return;
+      }
+
+      console.log(chalk.cyan('\nSoulSketch Memory Pack Fingerprint'));
+      console.log(`${chalk.white('Pack:')} ${path.resolve(packPath)}`);
+      console.log(`${chalk.white('Fingerprint:')} ${chalk.green(fingerprint)}\n`);
+      console.log(chalk.cyan('Per-file hashes:'));
+      for (const fileName of getMemoryPackFileOrder()) {
+        console.log(`  ${chalk.white(fileName.padEnd(28))} ${fileHashes[fileName]}`);
+      }
+    } catch (error) {
+      console.error(chalk.red(`Fingerprint failed: ${error.message}`));
+      process.exit(1);
+    }
+  });
+
+/**
+ * Diff Command
+ * Compares two memory packs and explains WHICH identity dimension changed
+ * (persona vs relationships vs technical vs voice vs runtime observations),
+ * not just that bytes differ.
+ */
+program
+  .command('diff <packA> <packB>')
+  .description('Compare two 5-file memory pack directories and explain what changed')
+  .option('-j, --json', 'Output machine-readable JSON')
+  .option('--exit-code', 'Exit with code 1 when the packs differ (like git diff --exit-code)')
+  .action(async (packAPath, packBPath, options) => {
+    try {
+      const packAFiles = await loadFiveFileMemoryPack(packAPath);
+      const packBFiles = await loadFiveFileMemoryPack(packBPath);
+      const diffReport = diffMemoryPacks(packAFiles, packBFiles);
+
+      if (options.json) {
+        console.log(
+          JSON.stringify(
+            { packA: path.resolve(packAPath), packB: path.resolve(packBPath), ...diffReport },
+            null,
+            2
+          )
+        );
+      } else {
+        console.log(formatMemoryPackDiffReport(packAPath, packBPath, diffReport));
+      }
+
+      if (options.exitCode && !diffReport.identical) {
+        process.exit(1);
+      }
+    } catch (error) {
+      console.error(chalk.red(`Diff failed: ${error.message}`));
+      process.exit(1);
+    }
+  });
+
+/**
  * Session Commands
  */
 const sessionCmd = program
@@ -363,11 +445,12 @@ program
         case 'transition':
           await interactiveTransition();
           break;
-        case 'graph':
+        case 'graph': {
           const stats = knowledgeGraph.getStatistics();
           console.log(chalk.cyan('\nGraph Statistics:'));
           console.log(JSON.stringify(stats, null, 2));
           break;
+        }
         case 'exit':
           running = false;
           break;
@@ -543,11 +626,146 @@ function validateRuntimeObservations(content: string, result: FiveFileValidation
       if (!observation.note && !observation.observation && !observation.content) {
         result.warnings.push(`runtime_observations.jsonl line ${index + 1} has no note-like field`);
       }
-    } catch (error) {
+    } catch {
       result.valid = false;
       result.errors.push(`runtime_observations.jsonl line ${index + 1} is invalid JSON`);
     }
   });
+}
+
+/**
+ * Load the 5 canonical memory pack files from a directory into memory.
+ * Fails loudly with the full list of missing files so the user can fix the
+ * pack in one pass instead of replaying the command per missing file.
+ */
+async function loadFiveFileMemoryPack(packDirectory: string): Promise<MemoryPackFiles> {
+  const stats = await fs.stat(packDirectory).catch(() => null);
+  if (!stats || !stats.isDirectory()) {
+    throw new Error(`Not a memory pack directory: ${packDirectory}`);
+  }
+
+  const missingFiles: string[] = [];
+  const memoryPackFiles = {} as MemoryPackFiles;
+
+  for (const fileName of getMemoryPackFileOrder()) {
+    const filePath = path.join(packDirectory, fileName);
+    if (await fs.pathExists(filePath)) {
+      memoryPackFiles[fileName] = await fs.readFile(filePath, 'utf8');
+    } else {
+      missingFiles.push(fileName);
+    }
+  }
+
+  if (missingFiles.length > 0) {
+    throw new Error(
+      `${packDirectory} is missing required memory pack files: ${missingFiles.join(', ')}. ` +
+        `A SoulSketch pack needs all 5 files (see examples/reference_memory_pack).`
+    );
+  }
+
+  return memoryPackFiles;
+}
+
+/** Human-readable identity dimension for each of the 5 memory pack files. */
+const memoryPackDimensionLabels: Record<MemoryPackFileName, string> = {
+  'persona.md': 'Persona (core identity)',
+  'relationship_dynamics.md': 'Relationships',
+  'technical_domains.md': 'Technical domains',
+  'stylistic_voice.md': 'Stylistic voice',
+  'runtime_observations.jsonl': 'Runtime observations'
+};
+
+type MemoryPackFileDiff = {
+  file: MemoryPackFileName;
+  dimension: string;
+  changed: boolean;
+  hashA: string;
+  hashB: string;
+  lineCountA: number;
+  lineCountB: number;
+  lineDelta: number;
+};
+
+type MemoryPackDiffReport = {
+  identical: boolean;
+  fingerprintA: string;
+  fingerprintB: string;
+  changedDimensions: string[];
+  files: MemoryPackFileDiff[];
+};
+
+/**
+ * Compare two loaded memory packs per identity dimension.
+ * Uses the same normalized hashing as the pack fingerprint, so a CRLF/LF
+ * difference between machines does NOT count as an identity change.
+ */
+function diffMemoryPacks(packAFiles: MemoryPackFiles, packBFiles: MemoryPackFiles): MemoryPackDiffReport {
+  const resultA = computeMemoryPackFingerprint(packAFiles);
+  const resultB = computeMemoryPackFingerprint(packBFiles);
+
+  const files: MemoryPackFileDiff[] = getMemoryPackFileOrder().map((fileName) => {
+    const lineCountA = countContentLines(packAFiles[fileName]);
+    const lineCountB = countContentLines(packBFiles[fileName]);
+    return {
+      file: fileName,
+      dimension: memoryPackDimensionLabels[fileName],
+      changed: resultA.fileHashes[fileName] !== resultB.fileHashes[fileName],
+      hashA: resultA.fileHashes[fileName],
+      hashB: resultB.fileHashes[fileName],
+      lineCountA,
+      lineCountB,
+      lineDelta: lineCountB - lineCountA
+    };
+  });
+
+  return {
+    identical: resultA.fingerprint === resultB.fingerprint,
+    fingerprintA: resultA.fingerprint,
+    fingerprintB: resultB.fingerprint,
+    changedDimensions: files.filter((file) => file.changed).map((file) => file.dimension),
+    files
+  };
+}
+
+function countContentLines(content: string): number {
+  return content.split(/\r?\n/).filter((line) => line.trim().length > 0).length;
+}
+
+function formatMemoryPackDiffReport(
+  packAPath: string,
+  packBPath: string,
+  report: MemoryPackDiffReport
+): string {
+  const lines = [
+    chalk.cyan('\nSoulSketch Memory Pack Diff'),
+    `${chalk.white('Pack A:')} ${path.resolve(packAPath)}`,
+    `${chalk.white('Pack B:')} ${path.resolve(packBPath)}`,
+    `${chalk.white('Fingerprint A:')} ${report.fingerprintA}`,
+    `${chalk.white('Fingerprint B:')} ${report.fingerprintB}`,
+    ''
+  ];
+
+  if (report.identical) {
+    lines.push(chalk.green('The packs are identical: same identity state, same fingerprint.'));
+    return lines.join('\n');
+  }
+
+  lines.push(chalk.yellow(`Identity changed in ${report.changedDimensions.length} dimension(s):`), '');
+
+  for (const file of report.files) {
+    if (!file.changed) {
+      lines.push(`  ${chalk.gray('unchanged')}  ${file.dimension} (${file.file})`);
+      continue;
+    }
+    const lineDeltaText =
+      file.lineDelta === 0
+        ? 'same line count, content edited'
+        : `${file.lineDelta > 0 ? '+' : ''}${file.lineDelta} non-empty line(s)`;
+    lines.push(`  ${chalk.yellow('changed  ')}  ${chalk.white(file.dimension)} (${file.file}): ${lineDeltaText}`);
+  }
+
+  lines.push('', chalk.gray('Tip: run `git diff` inside the pack repo to see the exact text changes.'));
+  return lines.join('\n');
 }
 
 function formatFiveFileValidationReport(result: FiveFileValidationResult): string {

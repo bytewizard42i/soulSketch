@@ -1,3 +1,9 @@
+> **ARCHIVED DESIGN NOTES.** This document describes an aspirational
+> architecture (MyAlice DID/wallet auth, role permissions, Notion console)
+> that was never built. The Notion adapter in [`sync/`](../../sync) is a
+> feature-flagged placeholder only. Kept for provenance — do not treat as
+> current spec.
+
 # SoulSketch × MyAlice × Notion Integration Guide
 
 ## 🎯 Purpose

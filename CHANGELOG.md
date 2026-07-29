@@ -5,6 +5,29 @@ All notable changes to the SoulSketch Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `soulsketch fingerprint <pack>`: deterministic identity fingerprint and
+  per-file hashes for a 5-file memory pack directory (`--json` for scripts).
+- `soulsketch diff <packA> <packB>`: per-dimension comparison of two memory
+  packs (persona / relationships / technical / voice / observations) with
+  `--json` and `--exit-code` options. Line-ending differences (CRLF vs LF) do
+  not count as identity changes.
+- End-to-end CLI tests (`npm run test:cli`) covering both new commands.
+- `schemas/README.md` clarifying that the 5-file directory is the canonical
+  format and what the two JSON schemas actually describe.
+
+### Fixed
+- CLI reported version `1.0.0`; it now reads the version from `package.json`
+  so it can no longer drift.
+- ROADMAP checklist marked the PixyPi reference guide as unpublished even
+  though `docs/PIXYPI_REFERENCE_IMPLEMENTATION.md` exists.
+- `CONTRIBUTING.md` still described the original triplet system; it now points
+  to the current AI family roster.
+- `docs/archive/NOTION_INTEGRATION.md` now carries an explicit ARCHIVED banner
+  noting the Notion adapter is a feature-flagged placeholder.
+
 ## [1.2.0] - 2026-01-03
 
 ### The Family Expansion - "From Triplets to Family"

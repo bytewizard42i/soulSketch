@@ -45,7 +45,7 @@ Goal: make the public repo true, runnable, and easy to trust.
 - [x] Add provenance, authority, and trust labels for memory pack continuity.
 - [x] Add core unit tests so `npm test` has real coverage.
 - [x] Make the CLI validate the actual 5-file memory pack directory format.
-- [ ] Publish a short `docs/PIXYPI_REFERENCE_IMPLEMENTATION.md` guide with no
+- [x] Publish a short `docs/PIXYPI_REFERENCE_IMPLEMENTATION.md` guide with no
   private memory contents.
 - [ ] Replace outdated business claims with a lean product note.
 - [ ] Add CI coverage for CLI smoke tests.
@@ -57,15 +57,15 @@ Goal: make SoulSketch useful before it becomes a platform.
 
 - [ ] `soulsketch validate <pack>`: full structure, JSONL, metadata, and warning
   checks for 5-file packs.
-- [ ] `soulsketch fingerprint <pack>`: generate a stable identity fingerprint and
+- [x] `soulsketch fingerprint <pack>`: generate a stable identity fingerprint and
   per-file hashes.
 - [ ] `soulsketch health <pack>`: report freshness, missing sections, stale files,
   trust labels, and risky provenance.
 - [ ] `soulsketch handoff`: generate a session handoff summary for switching
   assistants, machines, or model providers.
 - [ ] `soulsketch snapshot`: write a versioned continuity record for a milestone.
-- [ ] `soulsketch diff`: compare two fingerprints or pack directories and explain
-  what changed.
+- [x] `soulsketch diff`: compare two pack directories per identity dimension and
+  explain what changed.
 
 ## Phase 3: MCP and IDE Integration
 
