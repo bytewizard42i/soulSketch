@@ -13,7 +13,7 @@
 > If SoulSketch sparks ideas or helps you build, consider supporting us.  
 > Every contribution fuels our ability to learn, experiment, and share more with the community.  
 >  
-> **Cardano Wallet Handle:** `$johnny5i`
+> **Cardano/Midnight Wallet Handle:** `$johnny5i`
 
 ## 🧬 An open protocol for portable AI memory packs
 
