@@ -155,7 +155,12 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
       description:
         'Append ONE observation line to the pack\'s runtime_observations.jsonl ' +
         '(the living memory stream). This is the only write this server can perform: ' +
-        'append-only, never modifying or deleting existing memories.',
+        'append-only, never modifying or deleting existing memories. ' +
+        'MEMORY ETIQUETTE: when the conversation surfaces something memory-worthy ' +
+        '(a durable preference, a decision, a milestone, a relationship change), ' +
+        'FIRST ask the user, e.g. "Would you like me to save this to your ' +
+        'Soul-Sanctum?" - and only call this tool after they agree. Never save ' +
+        'silently; the user owns their memory.',
       inputSchema: {
         pack_dir: z.string().describe('Absolute path to the memory pack directory'),
         note: z.string().min(1).describe('The observation to remember'),

@@ -8,6 +8,10 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Memory etiquette (ask-first)**: the `soulsketch_observe` tool description
+  now instructs assistants to ask the user ("Would you like me to save this to
+  your Soul-Sanctum?") before saving memory-worthy moments - remembering is
+  consensual, never silent. Documented in `docs/MCP_SERVER.md`.
 - **Soul-Sanctum**: official product name for a user's private memory
   repository (the "private companion repo" in earlier docs). PixyPi is the
   maintainer's Soul-Sanctum. Term adopted across README, guides, and package

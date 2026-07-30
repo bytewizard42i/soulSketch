@@ -42,6 +42,16 @@ and that memory lands in *your* files, in *your* Git history, readable by
 only *add* lines. It is mechanically incapable of editing or deleting an
 existing memory.
 
+**Memory etiquette (ask-first):** the tool's description instructs the
+assistant to *ask before remembering*. When something memory-worthy comes up —
+a durable preference, a decision, a milestone — the assistant should offer:
+
+> "Would you like me to save this to your Soul-Sanctum?"
+
+…and only write after you say yes. Platform memory features decide for you
+what gets remembered; SoulSketch makes remembering a consensual act. (You can
+of course also volunteer one any time: "save that to my Soul-Sanctum.")
+
 ### 3. `soulsketch_validate_pack` — "Health check"
 Confirms all five files exist, are non-empty, and the diary is well-formed.
 **What it affords you:** confidence that a pack you're about to load — or one
