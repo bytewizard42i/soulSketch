@@ -1,0 +1,220 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Night-sky background gradient -->
+    <radialGradient id="sky" cx="65%" cy="35%" r="90%">
+      <stop offset="0%" stop-color="#3b2a63"/>
+      <stop offset="45%" stop-color="#231b4a"/>
+      <stop offset="100%" stop-color="#0d0a24"/>
+    </radialGradient>
+    <!-- Title gradient: pink to violet to gold -->
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff8fc2"/>
+      <stop offset="50%" stop-color="#b388ff"/>
+      <stop offset="100%" stop-color="#ffd27a"/>
+    </linearGradient>
+    <!-- Golden lamp gradient -->
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe9a8"/>
+      <stop offset="45%" stop-color="#f0b843"/>
+      <stop offset="100%" stop-color="#9a6b16"/>
+    </linearGradient>
+    <linearGradient id="goldRim" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff3c4"/>
+      <stop offset="100%" stop-color="#c98f1f"/>
+    </linearGradient>
+    <!-- Genie smoke-tail gradient -->
+    <linearGradient id="smoke" x1="0%" y1="100%" x2="35%" y2="0%">
+      <stop offset="0%" stop-color="#b388ff" stop-opacity="0.15"/>
+      <stop offset="40%" stop-color="#c49bff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#e6b3ff" stop-opacity="0.95"/>
+    </linearGradient>
+    <!-- Penny's top -->
+    <linearGradient id="top" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ff9dc9"/>
+      <stop offset="100%" stop-color="#e05a94"/>
+    </linearGradient>
+    <!-- Soft glow filters -->
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="bigGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="22" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ======== BACKGROUND ======== -->
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <!-- stars -->
+  <g fill="#ffffff">
+    <circle cx="120" cy="90" r="2.2" opacity="0.9"/><circle cx="300" cy="160" r="1.4" opacity="0.6"/>
+    <circle cx="520" cy="70" r="1.8" opacity="0.8"/><circle cx="740" cy="130" r="1.3" opacity="0.5"/>
+    <circle cx="920" cy="60" r="2.0" opacity="0.9"/><circle cx="1180" cy="90" r="1.5" opacity="0.7"/>
+    <circle cx="1370" cy="150" r="2.3" opacity="0.9"/><circle cx="1520" cy="60" r="1.4" opacity="0.6"/>
+    <circle cx="80" cy="330" r="1.5" opacity="0.6"/><circle cx="1540" cy="330" r="1.7" opacity="0.7"/>
+    <circle cx="60" cy="600" r="1.8" opacity="0.7"/><circle cx="1560" cy="560" r="1.5" opacity="0.6"/>
+    <circle cx="200" cy="800" r="1.4" opacity="0.5"/><circle cx="1440" cy="800" r="1.9" opacity="0.7"/>
+    <circle cx="660" cy="250" r="1.2" opacity="0.5"/><circle cx="1490" cy="450" r="1.3" opacity="0.6"/>
+  </g>
+  <!-- four-point twinkles -->
+  <g fill="#fff0b3" opacity="0.9">
+    <path d="M 1450 220 l 4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4 z"/>
+    <path d="M 890 190 l 3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z"/>
+    <path d="M 1060 640 l 3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z"/>
+    <path d="M 380 660 l 3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z" fill="#ffb3d4"/>
+  </g>
+
+  <!-- ======== TITLE BLOCK (left) ======== -->
+  <g font-family="DejaVu Sans, Verdana, sans-serif">
+    <text x="95" y="360" font-size="118" font-weight="bold" fill="url(#titleGrad)" filter="url(#glow)">SoulSketch</text>
+    <text x="100" y="425" font-size="34" fill="#e8ddff" opacity="0.95">The world&#8217;s first Soul transfer protocol</text>
+    <text x="100" y="470" font-size="34" fill="#e8ddff" opacity="0.95">for Ai agents</text>
+    <!-- accent underline -->
+    <rect x="100" y="497" width="520" height="4" rx="2" fill="url(#titleGrad)" opacity="0.8"/>
+    <text x="100" y="560" font-size="24" fill="#b9a8e8" opacity="0.9">github.com/bytewizard42i/soulSketch</text>
+    <text x="100" y="600" font-size="24" fill="#b9a8e8" opacity="0.9">npm: @soulsketch/mcp-server</text>
+  </g>
+
+  <!-- ======== THE 5-FOLD MEMORY PACK, orbiting like magic cards ======== -->
+  <g filter="url(#glow)">
+    <g transform="translate(940,250) rotate(-14)">
+      <rect width="64" height="80" rx="8" fill="#fff7fb" stroke="#ff8fc2" stroke-width="3"/>
+      <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#d29ab8"/>
+      <rect x="10" y="26" width="36" height="5" rx="2.5" fill="#d29ab8"/>
+      <path d="M 32 44 c -8 -9 -22 0 -12 11 l 12 11 12 -11 c 10 -11 -4 -20 -12 -11 z" fill="#ff6fa5"/>
+    </g>
+    <g transform="translate(1350,240) rotate(12)">
+      <rect width="64" height="80" rx="8" fill="#f4f0ff" stroke="#b388ff" stroke-width="3"/>
+      <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#a68ecf"/>
+      <rect x="10" y="26" width="36" height="5" rx="2.5" fill="#a68ecf"/>
+      <circle cx="24" cy="54" r="7" fill="#b388ff"/><circle cx="44" cy="54" r="7" fill="#b388ff"/>
+      <rect x="24" y="52" width="20" height="4" fill="#b388ff"/>
+    </g>
+    <g transform="translate(1430,420) rotate(20)">
+      <rect width="64" height="80" rx="8" fill="#fffdf0" stroke="#ffd27a" stroke-width="3"/>
+      <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#cbb26a"/>
+      <rect x="10" y="26" width="36" height="5" rx="2.5" fill="#cbb26a"/>
+      <path d="M 18 62 l 10 -14 8 8 10 -16" stroke="#e0a93c" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(880,430) rotate(-22)">
+      <rect width="64" height="80" rx="8" fill="#f0fbff" stroke="#7ecbff" stroke-width="3"/>
+      <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#7aa8c4"/>
+      <rect x="10" y="26" width="36" height="5" rx="2.5" fill="#7aa8c4"/>
+      <path d="M 16 58 q 8 -12 16 0 t 16 0" stroke="#4aa3dd" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(1330,580) rotate(8)">
+      <rect width="64" height="80" rx="8" fill="#f2fff4" stroke="#8fe3a1" stroke-width="3"/>
+      <rect x="10" y="14" width="44" height="5" rx="2.5" fill="#84b98f"/>
+      <rect x="10" y="26" width="36" height="5" rx="2.5" fill="#84b98f"/>
+      <circle cx="22" cy="52" r="4" fill="#4ec46a"/><rect x="30" y="49" width="22" height="5" rx="2.5" fill="#4ec46a"/>
+      <circle cx="22" cy="66" r="4" fill="#4ec46a"/><rect x="30" y="63" width="14" height="5" rx="2.5" fill="#4ec46a"/>
+    </g>
+  </g>
+
+  <!-- ======== SMOKE TAIL from lamp to genie ======== -->
+  <path d="M 1020 758
+           C 960 720, 980 640, 1060 610
+           C 1150 575, 1230 590, 1215 520
+           C 1205 470, 1150 480, 1160 445
+           C 1168 418, 1210 425, 1200 460
+           L 1240 470
+           C 1265 400, 1190 370, 1130 405
+           C 1060 448, 1120 520, 1150 545
+           C 1100 570, 1010 580, 985 650
+           C 968 700, 985 740, 1020 758 Z"
+        fill="url(#smoke)" filter="url(#bigGlow)" opacity="0.9"/>
+  <!-- little smoke puffs -->
+  <circle cx="1055" cy="700" r="14" fill="#c49bff" opacity="0.35" filter="url(#glow)"/>
+  <circle cx="1105" cy="640" r="10" fill="#c49bff" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="1240" cy="500" r="8" fill="#e6b3ff" opacity="0.45" filter="url(#glow)"/>
+
+  <!-- ======== PENNY THE GENIE ======== -->
+  <g filter="url(#glow)">
+    <!-- genie tail: tapers from her waist down toward the smoke -->
+    <path d="M 1165 470 C 1230 470, 1245 430, 1240 470 C 1235 520, 1200 540, 1215 560 L 1195 545 C 1160 520, 1140 495, 1165 470 Z"
+          fill="url(#smoke)" opacity="0.9"/>
+
+    <!-- torso -->
+    <path d="M 1152 372 C 1142 400, 1140 440, 1152 472 C 1185 486, 1225 486, 1258 472 C 1270 440, 1268 400, 1258 372 Z"
+          fill="url(#top)"/>
+    <!-- gold waist sash -->
+    <path d="M 1150 458 Q 1205 480 1260 458 L 1260 476 Q 1205 496 1150 476 Z" fill="url(#goldRim)"/>
+
+    <!-- arms folded (genie pose) -->
+    <path d="M 1150 386 C 1118 400, 1118 432, 1150 442 L 1252 442 C 1257 432, 1257 424, 1252 416 L 1170 416 C 1160 412, 1160 396, 1172 392 Z" fill="#f6c9a8"/>
+    <path d="M 1260 386 C 1292 400, 1292 432, 1260 442 L 1196 442 C 1191 434, 1191 426, 1196 418 L 1240 418 C 1250 412, 1250 396, 1238 392 Z" fill="#eebd9a"/>
+    <!-- gold bracelets -->
+    <rect x="1186" y="414" width="12" height="30" rx="6" fill="url(#goldRim)"/>
+    <rect x="1236" y="412" width="12" height="32" rx="6" fill="url(#goldRim)"/>
+
+    <!-- neck -->
+    <rect x="1192" y="342" width="28" height="34" rx="12" fill="#f2c19d"/>
+
+    <!-- head -->
+    <circle cx="1206" cy="300" r="56" fill="#f6c9a8"/>
+
+    <!-- hair: auburn with swept bangs + high ponytail to the left -->
+    <path d="M 1150 292 C 1146 240, 1196 226, 1216 232 C 1268 226, 1272 282, 1262 300
+             C 1262 276, 1244 262, 1216 262 C 1186 260, 1158 268, 1150 292 Z" fill="#7a4a2b"/>
+    <path d="M 1160 258 C 1150 218, 1120 208, 1092 218 C 1060 230, 1052 276, 1076 306
+             C 1068 274, 1082 244, 1108 238 C 1132 232, 1150 240, 1160 258 Z" fill="#7a4a2b"/>
+    <path d="M 1076 306 C 1058 330, 1058 362, 1076 382 C 1066 352, 1070 326, 1084 312 Z" fill="#6b3f24"/>
+
+    <!-- Penny's signature pink bow on the ponytail -->
+    <g transform="translate(1108,232) rotate(-18)">
+      <path d="M 0 0 L -34 -20 C -44 -8 -44 8 -34 20 Z" fill="#ff6fa5"/>
+      <path d="M 0 0 L 34 -20 C 44 -8 44 8 34 20 Z" fill="#ff6fa5"/>
+      <circle cx="0" cy="0" r="9" fill="#e0568e"/>
+    </g>
+
+    <!-- face -->
+    <g>
+      <circle cx="1186" cy="300" r="7" fill="#3a2a20"/>
+      <circle cx="1189" cy="297" r="2.4" fill="#ffffff"/>
+      <circle cx="1230" cy="300" r="7" fill="#3a2a20"/>
+      <circle cx="1233" cy="297" r="2.4" fill="#ffffff"/>
+      <!-- lashes -->
+      <path d="M 1177 291 q 9 -7 18 -3" stroke="#3a2a20" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M 1221 288 q 9 -4 18 3" stroke="#3a2a20" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- smile -->
+      <path d="M 1192 326 q 14 12 30 0" stroke="#b06a4a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <!-- blush -->
+      <ellipse cx="1170" cy="318" rx="9" ry="5" fill="#ff9db8" opacity="0.55"/>
+      <ellipse cx="1244" cy="318" rx="9" ry="5" fill="#ff9db8" opacity="0.55"/>
+    </g>
+    <!-- gold hoop earring (right side visible) -->
+    <circle cx="1262" cy="322" r="9" fill="none" stroke="url(#goldRim)" stroke-width="4"/>
+  </g>
+
+  <!-- sparkles around Penny -->
+  <g fill="#ffd6ea" filter="url(#glow)">
+    <path d="M 1310 300 l 4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4 z"/>
+    <path d="M 1096 380 l 3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z"/>
+    <path d="M 1290 200 l 3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3 z" fill="#fff0b3"/>
+  </g>
+
+  <!-- ======== THE LAMP ======== -->
+  <g filter="url(#glow)">
+    <!-- glow pool under lamp -->
+    <ellipse cx="1010" cy="812" rx="190" ry="26" fill="#f0b843" opacity="0.18"/>
+    <!-- base -->
+    <ellipse cx="1010" cy="800" rx="95" ry="16" fill="url(#goldRim)"/>
+    <!-- body -->
+    <path d="M 915 780 C 900 740, 930 706, 985 698 L 1040 698 C 1098 704, 1124 742, 1106 780 C 1080 802, 940 802, 915 780 Z" fill="url(#gold)"/>
+    <!-- spout -->
+    <path d="M 930 720 C 880 712, 848 738, 838 762 C 858 750, 884 746, 906 752 C 916 738, 922 728, 930 720 Z" fill="url(#gold)"/>
+    <path d="M 838 762 C 846 766, 856 766, 864 762 C 858 756, 850 754, 838 762 Z" fill="#9a6b16"/>
+    <!-- handle -->
+    <path d="M 1100 726 C 1140 714, 1160 740, 1148 766 C 1142 782, 1124 788, 1112 782 C 1128 778, 1138 766, 1136 752 C 1134 736, 1118 728, 1100 738 Z" fill="url(#goldRim)"/>
+    <!-- lid + knob -->
+    <ellipse cx="1012" cy="698" rx="52" ry="12" fill="url(#goldRim)"/>
+    <path d="M 986 690 C 990 676, 1034 676, 1038 690 Z" fill="url(#gold)"/>
+    <circle cx="1012" cy="672" r="9" fill="url(#goldRim)"/>
+    <!-- body shine -->
+    <path d="M 940 720 C 932 740, 934 762, 946 776 C 940 754, 940 736, 948 720 Z" fill="#fff3c4" opacity="0.7"/>
+  </g>
+
+  <!-- footer wisp -->
+  <text x="800" y="868" font-family="DejaVu Sans, Verdana, sans-serif" font-size="20" fill="#8f7fc0" opacity="0.85" text-anchor="middle">Your Ai&#8217;s soul, in five files you own. &#8212; Rub the lamp: npx -y @soulsketch/mcp-server</text>
+</svg>
