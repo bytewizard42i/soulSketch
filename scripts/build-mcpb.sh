@@ -66,14 +66,9 @@ const manifest = {
       env: { SOULSKETCH_ALLOWED_ROOTS: '\${user_config.soul_sanctum}' }
     }
   },
-  tools: [
-    { name: 'soulsketch_read_pack', description: 'Load a memory pack so the assistant adopts its identity (one soul, many vessels)' },
-    { name: 'soulsketch_validate_pack', description: 'Health-check a 5-file memory pack' },
-    { name: 'soulsketch_observe', description: 'Append one consensual observation line to the memory diary (the only write)' },
-    { name: 'soulsketch_fingerprint_pack', description: 'Deterministic SHA-256 seal of the pack state' },
-    { name: 'soulsketch_diff_packs', description: 'Which identity dimension changed between two packs' },
-    { name: 'soulsketch_continuity_record', description: 'Fingerprint + provenance labels as an audit artifact' }
-  ],
+  // Tool list is discovered live from the running server (tools/list);
+  // registries that want static schemas should introspect, not trust a copy.
+  tools_generated: true,
   compatibility: { platforms: ['darwin', 'win32', 'linux'], runtimes: { node: '>=18.0.0' } },
   user_config: {
     soul_sanctum: {
