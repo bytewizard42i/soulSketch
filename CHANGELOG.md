@@ -5,7 +5,9 @@ All notable changes to the SoulSketch Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.3.0] - 2026-07-29
+
+### "The Tooling Release" - fingerprints, semantic diff, and the MCP server
 
 ### Added
 - `@soulsketch/mcp-server` (ROADMAP Phase 3): MCP stdio server exposing six

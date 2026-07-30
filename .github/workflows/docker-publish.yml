@@ -1,0 +1,59 @@
+name: Publish MCP Server Image (GHCR)
+
+# Publishes the SoulSketch MCP server container to GitHub Container Registry,
+# attached to this repository: ghcr.io/bytewizard42i/soulsketch-mcp-server
+#
+# - Pushes to main (touching server code) update the 'edge' tag
+# - Version tags (v1.3.0) publish that version + 'latest'
+# The package starts PRIVATE; flip it public in GitHub -> Packages when ready.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages/**'
+      - 'package-lock.json'
+      - '.github/workflows/docker-publish.yml'
+    tags:
+      - 'v*.*.*'
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/soulsketch-mcp-server
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write   # lets the workflow push to GHCR with the built-in token
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute tags
+        id: meta
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+            echo "tags=${IMAGE}:${VERSION},${IMAGE}:latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "tags=${IMAGE}:edge" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: packages/mcp-server/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.description=SoulSketch MCP server - portable AI memory pack tools
+            org.opencontainers.image.licenses=Apache-2.0

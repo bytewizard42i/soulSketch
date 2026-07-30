@@ -1,0 +1,41 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
+  "name": "io.github.bytewizard42i/soulsketch",
+  "description": "Portable, user-owned AI memory packs: read, validate, fingerprint, diff, and append to SoulSketch 5-file memory packs",
+  "repository": {
+    "url": "https://github.com/bytewizard42i/soulSketch",
+    "source": "github"
+  },
+  "version_detail": {
+    "version": "1.3.0"
+  },
+  "packages": [
+    {
+      "registry_name": "npm",
+      "name": "@soulsketch/mcp-server",
+      "version": "1.3.0",
+      "runtime_hint": "npx",
+      "environment_variables": [
+        {
+          "name": "SOULSKETCH_ALLOWED_ROOTS",
+          "description": "Colon-separated absolute paths the server may access (your memory pack repos)",
+          "is_required": true
+        }
+      ]
+    },
+    {
+      "registry_name": "oci",
+      "name": "ghcr.io/bytewizard42i/soulsketch-mcp-server",
+      "version": "1.3.0",
+      "runtime_hint": "docker",
+      "runtime_arguments": [
+        {
+          "type": "named",
+          "name": "-v",
+          "value": "{source_path}:/memories",
+          "description": "Mount your memory pack repository at /memories"
+        }
+      ]
+    }
+  ]
+}

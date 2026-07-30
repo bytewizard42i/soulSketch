@@ -1,10 +1,20 @@
 {
   "name": "@soulsketch/core",
-  "version": "1.2.0",
-  "description": "Core agent kernel for SoulSketch Protocol",
+  "version": "1.3.0",
+  "description": "Core agent kernel for SoulSketch Protocol: portable AI memory packs, fingerprints, provenance, validation, and diff",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bytewizard42i/soulSketch.git",
+    "directory": "packages/core"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",

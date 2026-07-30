@@ -1,7 +1,7 @@
 # SoulSketch Protocol 🧬
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](https://github.com/bytewizard42i/soulSketch/releases)
+[![Version](https://img.shields.io/badge/version-1.3.0-green.svg)](https://github.com/bytewizard42i/soulSketch/releases)
 [![CI Status](https://img.shields.io/badge/CI-passing-brightgreen.svg)](.github/workflows/ci.yml)
 [![Code Style](https://img.shields.io/badge/code%20style-prettier-ff69b4.svg)](https://prettier.io/)
 

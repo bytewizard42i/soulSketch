@@ -19,7 +19,7 @@ import {
 } from './pack-io.js';
 
 const SERVER_NAME = 'soulsketch';
-const SERVER_VERSION = '1.2.0';
+const SERVER_VERSION = '1.3.0';
 
 function asTextResult(payload: unknown) {
   return { content: [{ type: 'text' as const, text: JSON.stringify(payload, null, 2) }] };
