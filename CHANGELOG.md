@@ -8,6 +8,18 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Interactive setup wizard**: `npx -y @soulsketch/mcp-server setup` creates
+  the Soul-Sanctum, scaffolds a personalized starter pack, explains every tool
+  in plain language (Need vs Optional), records choices in
+  `<sanctum>/.soulsketch/settings.json`, and prints the client config snippet.
+- **One soul, many vessels**: a Soul-Sanctum holds one shared identity, but
+  each AI tool (vessel) may carry its own name via the `## Vessels` section of
+  `persona.md`. The wizard collects vessel names, and the `read_pack` tool
+  instructs assistants to adopt their vessel name and sign diary entries with
+  it.
+- **Tool selection**: `read_pack` and `validate_pack` are always on; the four
+  optional tools honor the wizard settings or the `SOULSKETCH_TOOLS` env var
+  (`all` / `none` / comma list). 3 new tests (12 total in the server package).
 - **Memory etiquette (ask-first)**: the `soulsketch_observe` tool description
   now instructs assistants to ask the user ("Would you like me to save this to
   your Soul-Sanctum?") before saving memory-worthy moments - remembering is

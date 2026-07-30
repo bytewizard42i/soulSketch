@@ -17,6 +17,7 @@ import {
   requireCompletePack,
   resolveAllowedRoots
 } from './pack-io.js';
+import { OPTIONAL_TOOLS, type OptionalTool } from './settings.js';
 
 const SERVER_NAME = 'soulsketch';
 const SERVER_VERSION = '1.3.0';
@@ -38,9 +39,18 @@ function asErrorResult(error: unknown) {
  * - Read tools only touch pack directories inside the allowed roots.
  * - The single write tool (observe) appends one line to
  *   runtime_observations.jsonl and can never modify existing memories.
+ *
+ * Tool selection: read_pack and validate_pack are always registered (the
+ * "Need" tools). The optional tools (observe, fingerprint, diff,
+ * continuity_record) can be limited via options.enabledTools - normally
+ * chosen by the user in the setup wizard (`soulsketch-mcp setup`).
  */
-export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): McpServer {
+export function buildSoulSketchServer(options?: {
+  allowedRoots?: string[];
+  enabledTools?: OptionalTool[];
+}): McpServer {
   const allowedRoots = options?.allowedRoots ?? resolveAllowedRoots();
+  const enabledTools = new Set(options?.enabledTools ?? OPTIONAL_TOOLS);
 
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
 
@@ -67,6 +77,7 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
     }
   );
 
+  if (enabledTools.has('fingerprint'))
   server.registerTool(
     'soulsketch_fingerprint_pack',
     {
@@ -90,6 +101,7 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
     }
   );
 
+  if (enabledTools.has('diff'))
   server.registerTool(
     'soulsketch_diff_packs',
     {
@@ -123,7 +135,11 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
       description:
         'Load the contents of a memory pack so the assistant can adopt its identity: ' +
         'persona, relationships, technical context, voice, and recent observations. ' +
-        'Optionally restrict to specific files.',
+        'Optionally restrict to specific files. ' +
+        'ONE SOUL, MANY VESSELS: the pack is a single shared identity. If persona.md ' +
+        'has a "Vessels" section listing a name for the tool you are running in, adopt ' +
+        'that name (and use it as the author when observing) while keeping the shared ' +
+        'persona, relationships, and voice.',
       inputSchema: {
         pack_dir: z.string().describe('Absolute path to the memory pack directory'),
         files: z
@@ -148,6 +164,7 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
     }
   );
 
+  if (enabledTools.has('observe'))
   server.registerTool(
     'soulsketch_observe',
     {
@@ -178,6 +195,7 @@ export function buildSoulSketchServer(options?: { allowedRoots?: string[] }): Mc
     }
   );
 
+  if (enabledTools.has('continuity_record'))
   server.registerTool(
     'soulsketch_continuity_record',
     {

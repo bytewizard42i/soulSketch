@@ -91,6 +91,48 @@ your Git history, under your control. That is the entire point.
 
 ## Setup
 
+### The easy way: the interactive setup wizard
+
+```bash
+npx -y @soulsketch/mcp-server setup
+```
+
+Run once in a terminal. The wizard will:
+
+1. **Create (or locate) your Soul-Sanctum** — and scaffold a starter memory
+   pack for your assistant (it asks the assistant's name and personalizes the
+   files). It never overwrites existing memory files.
+2. **Let you choose your tools** — the two "Need" tools (`read_pack`,
+   `validate_pack`) are always on; the four optional ones (`observe`,
+   `fingerprint`, `diff`, `continuity_record`) are each explained in plain
+   language and enabled only if you say yes. Want a strictly read-only
+   setup? Decline `observe` and the server physically cannot write anything.
+3. **Save your choices** to `<sanctum>/.soulsketch/settings.json` — the
+   settings live *inside* your Soul-Sanctum, so they travel with it across
+   machines. (Power users can override per-session with the
+   `SOULSKETCH_TOOLS` env var: `all`, `none`, or a comma list.)
+4. **Print the exact config snippet** to paste into your AI tool.
+
+Re-run it any time to change your answers.
+
+### One soul, many vessels
+
+A Soul-Sanctum holds **one shared identity**: the same "soul" wakes up in
+every AI tool you use. But each tool (each *vessel*) may carry its own name —
+like one person known by different names to different friends. The wizard
+records these in a **Vessels** section of `persona.md`:
+
+```markdown
+## Vessels
+- Windsurf: Penny
+- Claude Desktop: Cassie
+```
+
+When an assistant reads the pack, it adopts the vessel name for the tool it's
+running in, keeps the shared persona/relationships/voice, and signs its diary
+entries with that name — so `runtime_observations.jsonl` reads like a family
+logbook with one continuous soul behind it.
+
 ### Step 0: Am I ready? (the doctor)
 
 Not sure whether your computer has what it needs? Run the doctor - it checks
