@@ -35,7 +35,27 @@ and able to move across tools, repos, machines, and model providers.
 
 ## 📖 Quick Start
 
-SoulSketch isn't published to npm yet, so for now you run it from a clone:
+### Fastest path: the MCP server (published on npm)
+
+[`@soulsketch/mcp-server`](https://www.npmjs.com/package/@soulsketch/mcp-server) works today in any MCP client (Claude Desktop, Windsurf, Cursor, …). Add it to your client's MCP config:
+
+```json
+{
+  "soulsketch": {
+    "command": "npx",
+    "args": ["-y", "@soulsketch/mcp-server"],
+    "env": {
+      "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/soul-sanctum"
+    }
+  }
+}
+```
+
+This gives your assistant the pack tools: validate, fingerprint, diff, read, append-only observe, and continuity records. See [docs/MCP_SERVER.md](docs/MCP_SERVER.md) for details. The [`@soulsketch/core`](https://www.npmjs.com/package/@soulsketch/core) library is also on npm.
+
+### From source: the CLI
+
+The `soulsketch` CLI isn't published to npm yet, so for now you run it from a clone:
 
 ```bash
 # Clone and install
