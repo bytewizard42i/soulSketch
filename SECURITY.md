@@ -18,7 +18,7 @@ We take security seriously and appreciate responsible disclosure of vulnerabilit
 
 ### How to Report
 
-Email: **security@soulsketch.me** or contact **bytewizard42i** directly
+Email: **contact@enterprisezk.com** or contact **bytewizard42i** directly
 
 Include:
 1. **Description**: Clear explanation of the vulnerability
@@ -84,6 +84,6 @@ After a fix is released, we will:
 
 ## Contact
 
-- Security Team: security@soulsketch.me
+- Security Team: contact@enterprisezk.com
 - Repository Owner: bytewizard42i
 - Alternative: Create a private security advisory on GitHub

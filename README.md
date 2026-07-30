@@ -295,6 +295,12 @@ We welcome contributions! Please see:
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - Community standards
 - [ROADMAP.md](ROADMAP.md) - Future development plans
 
+## 🐛 Reporting Bugs
+
+- Preferred: open a [GitHub Issue](https://github.com/bytewizard42i/soulSketch/issues)
+- Email: **contact@enterprisezk.com**
+- Security vulnerabilities: see [SECURITY.md](SECURITY.md) (please do not file public issues for those)
+
 ---
 
 ## 🌌 Use Cases

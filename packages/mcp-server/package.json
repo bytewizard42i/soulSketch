@@ -16,6 +16,10 @@
     "url": "git+https://github.com/bytewizard42i/soulSketch.git",
     "directory": "packages/mcp-server"
   },
+  "bugs": {
+    "url": "https://github.com/bytewizard42i/soulSketch/issues",
+    "email": "contact@enterprisezk.com"
+  },
   "bin": {
     "soulsketch-mcp": "dist/index.js"
   },
