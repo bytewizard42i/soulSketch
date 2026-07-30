@@ -1,10 +1,9 @@
 name: SoulSketch Memory Sync
 
+# NOTE: manual-trigger only. The Notion sync layer is a feature-flagged
+# placeholder (see sync/ and docs/archive/NOTION_INTEGRATION.md), and this
+# workflow had been failing on every matching push since Oct 2025.
 on:
-  push:
-    paths:
-      - "memory_packs/**.md"
-      - "config/.soulmeta.json"
   workflow_dispatch:
     inputs:
       sync_all:
