@@ -17,6 +17,10 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
   `docs/MCP_SERVER.md`.
 - `@soulsketch/core`: pure `validateMemoryPackContents` and `diffMemoryPacks`
   moved into core so the CLI and MCP server share one implementation.
+- Docker packaging for the MCP server (`packages/mcp-server/Dockerfile`):
+  multi-stage build, unprivileged user, memories mounted at `/memories`
+  (append `:ro` for read-only use), works with `--network none`. Setup in
+  `docs/MCP_SERVER.md`.
 - `soulsketch fingerprint <pack>`: deterministic identity fingerprint and
   per-file hashes for a 5-file memory pack directory (`--json` for scripts).
 - `soulsketch diff <packA> <packB>`: per-dimension comparison of two memory

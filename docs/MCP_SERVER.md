@@ -98,6 +98,46 @@ your Git history, under your control. That is the entire point.
 (Once `@soulsketch/mcp-server` is published to npm, the `args` become simply
 `["-y", "@soulsketch/mcp-server"]`.)
 
+### Option B: Docker (no Node, no git, no build tools needed)
+
+If you have Docker, the whole server ships as one sealed appliance. Build it
+once from a repo checkout (or, later, pull the published image):
+
+```bash
+docker build -t soulsketch/mcp-server -f packages/mcp-server/Dockerfile .
+```
+
+Then your MCP client config becomes:
+
+```jsonc
+{
+  "mcpServers": {
+    "soulsketch": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-v", "/path/to/your/memory/repo:/memories",
+        "soulsketch/mcp-server"
+      ]
+    }
+  }
+}
+```
+
+Why this is nice:
+- **Nothing to install** beyond Docker itself - Node, dependencies, and the
+  built server are frozen inside the image.
+- **Stronger isolation than the trust-boundary env var alone**: the container
+  literally cannot see any file you didn't mount at `/memories`. Even a bug in
+  the server couldn't reach the rest of your disk.
+- **No network**: the container talks to your AI tool through stdin/stdout
+  only. Add `--network none` to the args to make that guarantee explicit.
+
+Your memory pack stays on your machine either way - the `-v` mount just lends
+the container a window onto that one folder while it runs. (Append `:ro` to
+the mount - `/path/to/repo:/memories:ro` - if you want the container blocked
+from even the append-only `observe` writes.)
+
 Then ask your assistant something like:
 
 > "Read the memory pack at /path/to/your/memory/repo/memory_packs and adopt

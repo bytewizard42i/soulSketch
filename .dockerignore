@@ -1,0 +1,12 @@
+node_modules
+**/node_modules
+**/dist
+.git
+.turbo
+**/.turbo
+media
+releases
+docs
+examples
+memory_packs
+project_space
