@@ -80,6 +80,21 @@ your Git history, under your control. That is the entire point.
 
 ## Setup
 
+### Step 0: Am I ready? (the doctor)
+
+Not sure whether your computer has what it needs? Run the doctor - it checks
+everything, changes nothing without asking, and tells you exactly what to do:
+
+```bash
+bash scripts/doctor.sh
+```
+
+It verifies you have Node.js 18+ or a working Docker (either one is enough),
+detects platform quirks (like Docker Desktop not being started on
+Windows/WSL), and points you to guided help if something's missing.
+
+### Option A: Node.js
+
 ```jsonc
 // In your MCP client config (Claude Desktop, Windsurf, Cursor, ...)
 {
