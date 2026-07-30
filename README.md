@@ -1,3 +1,7 @@
+[![SoulSketch genie banner](media/soulsketch-genie-banner.png)](https://github.com/bytewizard42i/soulSketch)
+
+[GitHub repository](https://github.com/bytewizard42i/soulSketch) · [npm: `@soulsketch/mcp-server`](https://www.npmjs.com/package/@soulsketch/mcp-server)
+
 # SoulSketch Protocol 🧬
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -52,6 +56,10 @@ and able to move across tools, repos, machines, and model providers.
 ```
 
 This gives your assistant the pack tools: validate, fingerprint, diff, read, append-only observe, and continuity records. See [docs/MCP_SERVER.md](docs/MCP_SERVER.md) for details. The [`@soulsketch/core`](https://www.npmjs.com/package/@soulsketch/core) library is also on npm.
+
+[![SoulSketch genie: your Ai's soul in five files you own](media/soulsketch-genie-art.png)](https://www.npmjs.com/package/@soulsketch/mcp-server)
+
+*Your Ai's soul, in five files you own. Rub the lamp: `npx -y @soulsketch/mcp-server`*
 
 ### From source: the CLI
 
