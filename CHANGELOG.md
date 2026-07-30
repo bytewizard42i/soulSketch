@@ -21,6 +21,9 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
   multi-stage build, unprivileged user, memories mounted at `/memories`
   (append `:ro` for read-only use), works with `--network none`. Setup in
   `docs/MCP_SERVER.md`.
+- `scripts/doctor.sh`: friendly preflight check (Node 18+ or working Docker),
+  with platform-aware guidance (WSL/macOS/Linux) and consent-based install
+  offer on native Linux only. Documented as Step 0 in `docs/MCP_SERVER.md`.
 - `soulsketch fingerprint <pack>`: deterministic identity fingerprint and
   per-file hashes for a 5-file memory pack directory (`--json` for scripts).
 - `soulsketch diff <packA> <packB>`: per-dimension comparison of two memory
