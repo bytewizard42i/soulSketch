@@ -1,6 +1,6 @@
 {
   "name": "@soulsketch/mcp-server",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "mcpName": "io.github.bytewizard42i/soulsketch",
   "description": "MCP server exposing SoulSketch memory pack tools (validate, fingerprint, diff, read, observe) to any MCP-capable AI client",
   "type": "module",

@@ -1,4 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import {
   computeMemoryPackFingerprint,
@@ -20,7 +21,11 @@ import {
 import { collectDueReminders, OPTIONAL_TOOLS, type OptionalTool } from './settings.js';
 
 const SERVER_NAME = 'soulsketch';
-const SERVER_VERSION = '1.3.0';
+// Read the version from package.json so it can never drift from the release
+// (the CLI had this exact hardcoded-version bug once; never again).
+const SERVER_VERSION: string = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8')
+).version;
 
 function asTextResult(payload: unknown) {
   return { content: [{ type: 'text' as const, text: JSON.stringify(payload, null, 2) }] };

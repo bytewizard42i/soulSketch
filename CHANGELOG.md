@@ -5,6 +5,13 @@ All notable changes to the SoulSketch Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-07-29
+
+### Fixed
+- MCP server reported a stale version (1.3.0) in `serverInfo`: the version was
+  hardcoded in `server.ts` - the same drift bug the CLI once had. It now reads
+  `package.json` at runtime and can never drift again.
+
 ## [1.3.2] - 2026-07-29
 
 ### "The Wizard Release" - beginner-proof onboarding
