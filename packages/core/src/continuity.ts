@@ -69,8 +69,9 @@ export function hashPortableText(content: string): string {
 /**
  * Compute a deterministic fingerprint for the complete 5-file memory pack.
  * The fingerprint is not a secret and does not reveal file contents by itself.
- * It is meant for audit logs, Git tags, handoff records, and later DID or ZK
- * proofs that need to refer to a specific memory state.
+ * It is meant for audit logs, Git tags, and handoff records that need to refer
+ * to a specific memory state. DID and ZK-proof anchoring are planned
+ * integrations (future use, not yet implemented).
  */
 export function computeMemoryPackFingerprint(memoryPackFiles: MemoryPackFiles): {
   fingerprint: string;

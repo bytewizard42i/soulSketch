@@ -205,7 +205,7 @@ Detailed content with markdown formatting.
 - API_KEY: secret-here
 
 ## Entities
-- **Cassie** (AI) - `did:cassie`
+- **Cassie** (AI) - `did:cassie` (illustrative; DID integration is future use, not yet implemented)
 
 ## Links
 - https://soulsketch.me

@@ -317,17 +317,15 @@ We welcome contributions! Please see:
 ### Future Applications
 * **Memory Health Reports**: freshness, contradiction, and drift checks
 * **Session Handoffs**: structured summaries when switching assistants or tools
-* **MCP Server Integration**: portable memory operations inside compatible IDEs
-* **DIDz and Midnight Proofs**: continuity proofs that do not reveal private memory
+* **DIDz and Midnight Proofs** (future use, not yet implemented): continuity proofs that do not reveal private memory
 
 ---
 
 ## 🧭 Future Directions
 
-* Add memory encryption and integrity verification
-* Publish practical CLI commands for validate, fingerprint, health, and handoff
-* Build a SoulSketch MCP server
-* Integrate SoulSketch fingerprints into DID-linked agent identity records
+* Add memory encryption (fingerprint-based integrity verification shipped in v1.3)
+* Publish CLI commands for health and handoff (validate, fingerprint, and diff shipped in v1.3)
+* Integrate SoulSketch fingerprints into DID-linked agent identity records (future use, not yet implemented)
 * Build developer SDKs only after the local-first workflow is solid
 
 ---

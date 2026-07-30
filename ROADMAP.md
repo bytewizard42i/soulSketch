@@ -94,7 +94,7 @@ leaking private state.
 - [ ] Add memory consolidation helpers for old runtime observations.
 - [ ] Add diffusion packets for cross-assistant learnings.
 
-## Phase 5: DIDz and Midnight Integration
+## Phase 5: DIDz and Midnight Integration (future use - nothing implemented yet)
 
 Goal: make agent continuity verifiable without revealing private memory contents.
 

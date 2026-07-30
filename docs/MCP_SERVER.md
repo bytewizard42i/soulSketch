@@ -78,7 +78,7 @@ Bundles the fingerprint with provenance labels: who authored this state
 (human/AI/imported), how authoritative it is (canonical/working/untrusted),
 and how sensitive (private/public/sanitized) — plus warnings when the labels
 don't add up. **What it affords you:** an audit artifact. Store it next to the
-pack, pin it to a Git commit, or (roadmap) anchor it to a decentralized
+pack, pin it to a Git commit, or (future use, not yet implemented) anchor it to a decentralized
 identity so anyone can verify your agent's provenance without seeing inside.
 
 ## The trust model, in one paragraph

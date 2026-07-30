@@ -121,8 +121,9 @@ a release.
 4. Hash that concatenated manifest with SHA-256.
 
 The resulting fingerprint identifies a memory state without disclosing the
-memory contents. It can be used in Git tags, handoff notes, DID records, or
-future zero-knowledge proofs.
+memory contents. It can be used today in Git tags and handoff notes; DID
+records and zero-knowledge proofs are planned integrations (future use, not
+yet implemented).
 
 ### Provenance Fields
 

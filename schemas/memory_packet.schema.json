@@ -92,7 +92,7 @@
         "properties": {
           "name": {"type": "string"},
           "type": {"type": "string"},
-          "did": {"type": "string"}
+          "did": {"type": "string", "description": "Decentralized identifier (future use; no DID integration is implemented yet)"}
         }
       },
       "description": "Referenced entities (people, AIs, orgs)"
