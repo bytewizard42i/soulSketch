@@ -102,7 +102,7 @@ Windows/WSL), and points you to guided help if something's missing.
   "mcpServers": {
     "soulsketch": {
       "command": "npx",
-      "args": ["-y", "tsx", "/path/to/soulSketch/packages/mcp-server/src/index.ts"],
+      "args": ["-y", "@soulsketch/mcp-server"],
       "env": {
         "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/soul-sanctum"
       }
@@ -114,8 +114,8 @@ Windows/WSL), and points you to guided help if something's missing.
 (`SOULSKETCH_ALLOWED_ROOTS` points at your Soul-Sanctum — the private repo
 holding your memory packs. The server can't see anything outside it.)
 
-(Once `@soulsketch/mcp-server` is published to npm, the `args` become simply
-`["-y", "@soulsketch/mcp-server"]`.)
+(Working from a repo checkout instead? Use
+`"args": ["-y", "tsx", "/path/to/soulSketch/packages/mcp-server/src/index.ts"]`.)
 
 ### Option B: Docker (no Node, no git, no build tools needed)
 

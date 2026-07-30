@@ -345,7 +345,7 @@ SoulSketch is intentionally honest about where it is on the maturity curve:
 - **No formal evaluation of "identity preservation."** Claims about continuity between model versions are based on subjective qualitative observation, not benchmarks.
 - **Security features are partial.** Today the codebase ships PII regex redaction and `.gitignore` hygiene. Memory encryption, sandboxed tool execution, audit logging, and TTL are aspirational; see [`SECURITY.md`](SECURITY.md).
 - **Some sections of this README and the roadmap describe planned components** (e.g. additional `packages/`, web console, hosted services). These are flagged as planned and are not in the current tree.
-- **Not a published npm package yet.** `@soulsketch/cli` and `@soulsketch/core` are not on the registry; use the repo directly for now.
+- **Published packages**: [`@soulsketch/core`](https://www.npmjs.com/package/@soulsketch/core) and [`@soulsketch/mcp-server`](https://www.npmjs.com/package/@soulsketch/mcp-server) are on npm (since v1.3.0). The `soulsketch` CLI is still repo-only for now.
 - **Philosophical material is exploratory.** Files under `philosophy/` and the poetic framing throughout are deliberately speculative; they are not normative claims about consciousness.
 
 If any of these matter for your use case, please open an issue. Honest scoping is part of the project.

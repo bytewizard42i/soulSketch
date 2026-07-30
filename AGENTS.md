@@ -12,8 +12,8 @@ overview and [`SECURITY.md`](SECURITY.md) for what is and isn't implemented.
 
 ## What this repo is *not*
 
-- Not a published npm package yet (`@soulsketch/core` / `@soulsketch/cli` are
-  source-only for now).
+- `@soulsketch/core` and `@soulsketch/mcp-server` are published on npm
+  (v1.3.0+). The CLI (`@soulsketch/cli`) is still source-only.
 - Not a scientific claim about consciousness. The poetic framing in
   [`philosophy/`](philosophy) and parts of the README is intentionally
   exploratory.
