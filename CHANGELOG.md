@@ -5,6 +5,14 @@ All notable changes to the SoulSketch Protocol will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **Soul-Sanctum**: official product name for a user's private memory
+  repository (the "private companion repo" in earlier docs). PixyPi is the
+  maintainer's Soul-Sanctum. Term adopted across README, guides, and package
+  docs.
+
 ## [1.3.0] - 2026-07-29
 
 ### "The Tooling Release" - fingerprints, semantic diff, and the MCP server

@@ -39,7 +39,9 @@ overview and [`SECURITY.md`](SECURITY.md) for what is and isn't implemented.
 - Memory packs are 5 plain files: `persona.md`, `relationship_dynamics.md`,
   `technical_domains.md`, `stylistic_voice.md`, `runtime_observations.jsonl`.
 - Public protocol + private state: this repo is the **skeleton**; users keep
-  their actual memories in a separate private repo.
+  their actual memories in a separate private repo called their
+  **Soul-Sanctum** (product term; normative docs may still say "private
+  memory repository"). The maintainer's Soul-Sanctum is PixyPi.
 - Code style: TypeScript, ESM, Prettier, ESLint, Vitest.
 
 ## If you're making changes

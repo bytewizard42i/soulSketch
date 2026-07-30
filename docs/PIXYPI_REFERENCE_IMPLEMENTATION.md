@@ -1,7 +1,9 @@
 # PixyPi Reference Implementation
 
-PixyPi is the private, in-use reference implementation that keeps SoulSketch
-grounded. It proves the protocol is not only a philosophy or a future SaaS idea.
+PixyPi is the maintainer's **Soul-Sanctum** - the private, in-use reference
+implementation that keeps SoulSketch grounded. (A Soul-Sanctum is what we call
+each user's private memory repository: the one place their assistant's
+identity lives, owned by them alone.) It proves the protocol is not only a philosophy or a future SaaS idea.
 It is a working operating pattern for continuity across assistants, machines,
 repositories, and model providers.
 

@@ -25,7 +25,7 @@ read, verify, and append to portable, user-owned AI memory packs.
       "command": "npx",
       "args": ["-y", "@soulsketch/mcp-server"],
       "env": {
-        "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/memory/repo"
+        "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/soul-sanctum"
       }
     }
   }
@@ -38,7 +38,9 @@ you and the full trust model) live in the
 
 ## Trust model, in one paragraph
 
-The server only touches directories you allow via `SOULSKETCH_ALLOWED_ROOTS`.
+The server only touches directories you allow via `SOULSKETCH_ALLOWED_ROOTS` -
+normally your **Soul-Sanctum**, the private repo where your assistant's
+memory packs live.
 Five of the six tools are read-only; the sixth appends single lines to
 `runtime_observations.jsonl` and can never modify or delete existing memories.
 No network calls, no telemetry, no hosted anything: your assistant's memory is

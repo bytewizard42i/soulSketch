@@ -41,7 +41,8 @@ runtime_observations.jsonl
 
 ## Create Your Own Pack
 
-Copy the technical assistant template into your private state repository:
+Copy the technical assistant template into your Soul-Sanctum (your private
+state repository):
 
 ```bash
 mkdir -p ~/my-assistant-state/memory_packs
@@ -101,8 +102,8 @@ source of truth.
 PixyPi is the private, in-use reference implementation. The public pattern is:
 
 1. Public protocol and templates live in SoulSketch.
-2. Private state lives in a private repository.
-3. MCP, IDE, and assistant tools read from that private state.
+2. Private state lives in a private repository - your **Soul-Sanctum**.
+3. MCP, IDE, and assistant tools read from that Soul-Sanctum.
 4. Handoff notes summarize current work when switching assistants.
 5. Git history preserves provenance.
 

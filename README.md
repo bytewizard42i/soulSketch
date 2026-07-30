@@ -28,7 +28,7 @@ and able to move across tools, repos, machines, and model providers.
 - **🔄 Model-agnostic**: memory packs are plain Markdown + JSONL, not tied to a specific provider.
 - **👨‍👩‍👧‍👦 AI Family pattern**: documented conventions for running coordinated assistants across multiple machines (Alice, Cassie, Casie, Cara, Penny, Win).
 - **🔌 MCP server**: `@soulsketch/mcp-server` exposes validate/fingerprint/diff/read/observe tools to any MCP client (Claude Desktop, Windsurf, Cursor, …) — see [docs/MCP_SERVER.md](docs/MCP_SERVER.md). Also plays well with the standard `memory`, `filesystem`, `git`, and `github` MCP servers.
-- **🔐 Public protocol + private state**: this repo is the skeleton; users keep their own memories in a private companion repo.
+- **🔐 Public protocol + private Soul-Sanctum**: this repo is the skeleton; users keep their own memories in a private companion repo called their **Soul-Sanctum** — the one place their assistant's identity lives, owned by them alone. (The maintainer's Soul-Sanctum is [PixyPi](docs/PIXYPI_REFERENCE_IMPLEMENTATION.md).)
 - **🛠️ TypeScript core + CLI**: a `@soulsketch/core` package and a `soulsketch` CLI for working with packs and memory.
 - **🔎 Fingerprints and trust labels**: deterministic hashes plus provenance,
   authority, and trust metadata for auditable continuity.
@@ -256,8 +256,8 @@ Your **state** - the actual memories and configurations for your AI family:
 ### Getting Started
 
 1. **Fork/clone SoulSketch** for the protocol templates
-2. **Create a private repo** for your AI family's state
-3. **Configure MCP** to point to your private repo
+2. **Create your Soul-Sanctum** - a private repo for your AI family's state
+3. **Configure MCP** to point to your Soul-Sanctum
 4. **Start building** your AI family!
 
 ---
@@ -278,7 +278,7 @@ When launching a new AI instance, SoulSketch follows this inheritance flow:
 
 ### Built-in today
 - **PII Redaction**: regex-based redaction helpers in `packages/core/src/safety.ts` (best-effort).
-- **Public/private split**: this repo holds no personal memories; users keep state in a private companion repo.
+- **Public/private split**: this repo holds no personal memories; users keep state in their private Soul-Sanctum repo.
 - **`.gitignore` hygiene** for common secret paths.
 
 ### Planned

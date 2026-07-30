@@ -18,10 +18,11 @@ the five plain files that hold an assistant's identity:
 | `stylistic_voice.md` | How it talks |
 | `runtime_observations.jsonl` | What it's noticed lately (a diary, one line per entry) |
 
-Because these are plain files in a Git repo **you** own, your assistant's
-identity isn't trapped inside any one AI company. This server is the bridge
-that lets any MCP-capable assistant *use* that identity — read it, verify it,
-and add to it — live, during a conversation.
+These files live in a private Git repo **you** own — we call it your
+**Soul-Sanctum**: the one place your assistant's identity lives, under your
+control, not trapped inside any AI company. This server is the bridge that
+lets any MCP-capable assistant *use* that identity — read it, verify it, and
+add to it — live, during a conversation.
 
 ## The six tools, and what each one affords you
 
@@ -103,12 +104,15 @@ Windows/WSL), and points you to guided help if something's missing.
       "command": "npx",
       "args": ["-y", "tsx", "/path/to/soulSketch/packages/mcp-server/src/index.ts"],
       "env": {
-        "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/memory/repo"
+        "SOULSKETCH_ALLOWED_ROOTS": "/path/to/your/soul-sanctum"
       }
     }
   }
 }
 ```
+
+(`SOULSKETCH_ALLOWED_ROOTS` points at your Soul-Sanctum — the private repo
+holding your memory packs. The server can't see anything outside it.)
 
 (Once `@soulsketch/mcp-server` is published to npm, the `args` become simply
 `["-y", "@soulsketch/mcp-server"]`.)
