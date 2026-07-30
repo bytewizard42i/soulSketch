@@ -11,7 +11,7 @@ import { mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { buildSoulSketchServer } from './server.js';
-import { resolveEnabledOptionalTools, OPTIONAL_TOOLS } from './settings.js';
+import { collectDueReminders, resolveEnabledOptionalTools, OPTIONAL_TOOLS } from './settings.js';
 import { runWizard } from './wizard.js';
 
 let workspaceRoot: string;
@@ -28,9 +28,10 @@ describe('setup wizard (scripted user)', () => {
   it('creates a Soul-Sanctum, starter pack, and settings from the Q&A', async () => {
     const sanctumPath = path.join(workspaceRoot, 'my-sanctum');
     // The scripted user: sanctum path, soul name "Pixel", vessel names,
-    // create pack -> yes, observe -> yes, fingerprint -> yes, diff -> NO,
-    // continuity_record -> default (yes).
-    const answers = [sanctumPath, 'Pixel', 'Windsurf: Pix, Claude Desktop: Pixie', 'y', 'y', 'y', 'n', ''];
+    // create pack -> yes, git history -> no, observe -> yes,
+    // fingerprint -> yes, diff -> NO, continuity_record -> default (yes),
+    // GitHub backup -> "2" (skip for now, remind me in a week).
+    const answers = [sanctumPath, 'Pixel', 'Windsurf: Pix, Claude Desktop: Pixie', 'y', 'n', 'y', 'y', 'n', '', '2'];
     const transcript: string[] = [];
 
     await runWizard({
@@ -58,6 +59,14 @@ describe('setup wizard (scripted user)', () => {
       await readFile(path.join(sanctumPath, '.soulsketch', 'settings.json'), 'utf8')
     );
     expect(settings.enabledTools).toEqual(['observe', 'fingerprint', 'continuity_record']);
+
+    // "Remind me in a week" scheduled a github-backup reminder ~7 days out.
+    expect(settings.reminders).toHaveLength(1);
+    expect(settings.reminders[0].topic).toBe('github-backup');
+    const daysUntilReminder =
+      (new Date(settings.reminders[0].remindAt).getTime() - Date.now()) / (24 * 60 * 60 * 1000);
+    expect(daysUntilReminder).toBeGreaterThan(6.5);
+    expect(daysUntilReminder).toBeLessThan(7.5);
 
     // The printed config snippet points at the sanctum.
     expect(transcript.join('\n')).toContain('SOULSKETCH_ALLOWED_ROOTS');
@@ -88,6 +97,27 @@ describe('settings resolution priority', () => {
     expect(
       await resolveEnabledOptionalTools({ allowedRoots: [root], env: { SOULSKETCH_TOOLS: 'none' } as NodeJS.ProcessEnv })
     ).toEqual([]);
+  });
+});
+
+describe('reminders', () => {
+  it('surfaces a reminder only after its date has passed', async () => {
+    const root = path.join(workspaceRoot, 'reminder-root');
+    const packDir = path.join(root, 'memory_packs');
+    await mkdir(path.join(root, '.soulsketch'), { recursive: true });
+    await mkdir(packDir, { recursive: true });
+    await writeFile(
+      path.join(root, '.soulsketch', 'settings.json'),
+      JSON.stringify({
+        reminders: [
+          { topic: 'github-backup', remindAt: '2001-01-01T00:00:00Z', note: 'overdue reminder' },
+          { topic: 'far-future', remindAt: '2101-01-01T00:00:00Z', note: 'not yet' }
+        ]
+      })
+    );
+
+    const due = await collectDueReminders(packDir);
+    expect(due).toEqual(['overdue reminder']);
   });
 });
 

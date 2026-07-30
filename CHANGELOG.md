@@ -12,6 +12,15 @@ and this project adheres to [semantic Versioning](https://semver.org/spec/v2.0.0
   the Soul-Sanctum, scaffolds a personalized starter pack, explains every tool
   in plain language (Need vs Optional), records choices in
   `<sanctum>/.soulsketch/settings.json`, and prints the client config snippet.
+- **GitHub backup step with skip-and-remind**: the wizard offers guided setup
+  of a private GitHub backup; choosing "remind me in a week" schedules a
+  reminder in settings that `read_pack` surfaces to the assistant (as
+  `reminders_for_user`) once due - your assistant relays it in character.
+- **Beginner-proof wizard UX**: OS-aware Soul-Sanctum location suggestions in
+  plain language, anecdotes for every tool explanation (wax seal, bound
+  notebook, spot-the-difference), optional `git init` ("time machine"), final
+  health check, and per-OS instructions for WHERE the AI tool's config file
+  lives.
 - **One soul, many vessels**: a Soul-Sanctum holds one shared identity, but
   each AI tool (vessel) may carry its own name via the `## Vessels` section of
   `persona.md`. The wizard collects vessel names, and the `read_pack` tool

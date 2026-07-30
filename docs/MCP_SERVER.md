@@ -107,11 +107,19 @@ Run once in a terminal. The wizard will:
    `fingerprint`, `diff`, `continuity_record`) are each explained in plain
    language and enabled only if you say yes. Want a strictly read-only
    setup? Decline `observe` and the server physically cannot write anything.
-3. **Save your choices** to `<sanctum>/.soulsketch/settings.json` — the
+3. **Offer off-site backup** — your memories initially live on one computer
+   only. The wizard offers to walk you through backing them up to a free,
+   *private* GitHub repository. Not ready? Choose **"skip for now, remind me
+   in a week"** and your assistant itself will gently remind you: the
+   reminder is stored in settings and rides along with `read_pack` once the
+   date passes, so whichever vessel wakes up next relays it, in character.
+4. **Save your choices** to `<sanctum>/.soulsketch/settings.json` — the
    settings live *inside* your Soul-Sanctum, so they travel with it across
    machines. (Power users can override per-session with the
    `SOULSKETCH_TOOLS` env var: `all`, `none`, or a comma list.)
-4. **Print the exact config snippet** to paste into your AI tool.
+5. **Run a final health check** and **print the exact config snippet** to
+   paste into your AI tool — including *where* that config file lives on
+   your operating system (Claude Desktop / Windsurf / Cursor).
 
 Re-run it any time to change your answers.
 

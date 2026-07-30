@@ -10,9 +10,39 @@ import * as path from 'node:path';
 export const OPTIONAL_TOOLS = ['observe', 'fingerprint', 'diff', 'continuity_record'] as const;
 export type OptionalTool = (typeof OPTIONAL_TOOLS)[number];
 
+export type SanctumReminder = {
+  topic: string;
+  remindAt: string; // ISO date - surfaced via read_pack once this passes
+  note: string;
+};
+
 export type SanctumSettings = {
   enabledTools?: string[];
+  reminders?: SanctumReminder[];
 };
+
+/**
+ * Collect reminders that have come due for a pack. The settings file lives
+ * in the Sanctum root (.soulsketch/settings.json); packs usually sit one
+ * level below it, so we check both the pack directory and its parent.
+ * Read-only: firing a reminder never modifies anything - it keeps appearing
+ * until the user acts (e.g. re-runs the setup wizard, which reschedules it).
+ */
+export async function collectDueReminders(packDirectory: string, now = new Date()): Promise<string[]> {
+  const candidates = [packDirectory, path.dirname(packDirectory)];
+  for (const dir of candidates) {
+    try {
+      const raw = await readFile(path.join(dir, '.soulsketch', 'settings.json'), 'utf8');
+      const settings = JSON.parse(raw) as SanctumSettings;
+      return (settings.reminders ?? [])
+        .filter((reminder) => new Date(reminder.remindAt) <= now)
+        .map((reminder) => reminder.note);
+    } catch {
+      // No settings here - try the next candidate.
+    }
+  }
+  return [];
+}
 
 /**
  * Decide which optional tools are enabled, in priority order:

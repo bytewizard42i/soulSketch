@@ -17,7 +17,7 @@ import {
   requireCompletePack,
   resolveAllowedRoots
 } from './pack-io.js';
-import { OPTIONAL_TOOLS, type OptionalTool } from './settings.js';
+import { collectDueReminders, OPTIONAL_TOOLS, type OptionalTool } from './settings.js';
 
 const SERVER_NAME = 'soulsketch';
 const SERVER_VERSION = '1.3.0';
@@ -157,7 +157,14 @@ export function buildSoulSketchServer(options?: {
         for (const fileName of wanted) {
           contents[fileName] = allFiles[fileName as keyof typeof allFiles] ?? null;
         }
-        return asTextResult({ pack: resolved, contents });
+        // Due reminders (e.g. "set up GitHub backup") ride along with the pack
+        // so the assistant can gently relay them to the user, in character.
+        const dueReminders = await collectDueReminders(resolved);
+        return asTextResult(
+          dueReminders.length > 0
+            ? { pack: resolved, contents, reminders_for_user: dueReminders }
+            : { pack: resolved, contents }
+        );
       } catch (error) {
         return asErrorResult(error);
       }
