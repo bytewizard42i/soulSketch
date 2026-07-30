@@ -48,7 +48,8 @@ Goal: make the public repo true, runnable, and easy to trust.
 - [x] Publish a short `docs/PIXYPI_REFERENCE_IMPLEMENTATION.md` guide with no
   private memory contents.
 - [ ] Replace outdated business claims with a lean product note.
-- [ ] Add CI coverage for CLI smoke tests.
+- [x] Add CI coverage for CLI smoke tests (`.github/workflows/tests.yml` runs
+  the CLI e2e suite and a Docker build on every push/PR).
 - [ ] Add a current security audit note with known dependency and runtime status.
 
 ## Phase 2: Practical Developer Tools
